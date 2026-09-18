@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>사물 인터넷 &mdash; 단원 목차</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js" crossorigin="anonymous"></script>
+<style>
+    :root {
+        --font-sans: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+    }
+    * { font-family: var(--font-sans); }
+    body { background-color: #f8fafc; }
+    .break-keep { word-break: keep-all; }
+
+    .hero-gradient {
+        background: linear-gradient(135deg, #0f766e 0%, #0e7490 100%);
+    }
+
+    .lesson-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 1.25rem;
+        transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    }
+    .lesson-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 28px -8px rgba(15, 23, 42, 0.18);
+    }
+
+    .step-num {
+        font-variant-numeric: tabular-nums;
+        letter-spacing: -0.02em;
+    }
+
+    :root { color-scheme: light dark; }
+
+    @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) body { background-color: #0f172a !important; }
+        :root:not([data-theme="light"]) .lesson-card {
+            background: #1e293b !important;
+            border-color: #334155 !important;
+        }
+        :root:not([data-theme="light"]) .lesson-card:hover {
+            box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.5) !important;
+        }
+        :root:not([data-theme="light"]) .text-slate-900 { color: #f1f5f9 !important; }
+        :root:not([data-theme="light"]) .text-slate-800 { color: #e2e8f0 !important; }
+        :root:not([data-theme="light"]) .text-slate-700 { color: #cbd5e1 !important; }
+        :root:not([data-theme="light"]) .text-slate-600 { color: #b6c2d1 !important; }
+        :root:not([data-theme="light"]) .text-slate-500 { color: #94a3b8 !important; }
+        :root:not([data-theme="light"]) .border-slate-200 { border-color: #334155 !important; }
+        :root:not([data-theme="light"]) footer.bg-white { background-color: #1e293b !important; border-color: #334155 !important; }
+    }
+    :root[data-theme="dark"] body { background-color: #0f172a !important; }
+    :root[data-theme="dark"] .lesson-card { background: #1e293b !important; border-color: #334155 !important; }
+    :root[data-theme="dark"] .lesson-card:hover { box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.5) !important; }
+    :root[data-theme="dark"] .text-slate-900 { color: #f1f5f9 !important; }
+    :root[data-theme="dark"] .text-slate-800 { color: #e2e8f0 !important; }
+    :root[data-theme="dark"] .text-slate-700 { color: #cbd5e1 !important; }
+    :root[data-theme="dark"] .text-slate-600 { color: #b6c2d1 !important; }
+    :root[data-theme="dark"] .text-slate-500 { color: #94a3b8 !important; }
+    :root[data-theme="dark"] .border-slate-200 { border-color: #334155 !important; }
+    :root[data-theme="dark"] footer.bg-white { background-color: #1e293b !important; border-color: #334155 !important; }
+</style>
+</head>
+<body class="text-slate-900">
+
+<!-- ── Hero ── -->
+<header class="hero-gradient text-white py-24 px-6 relative overflow-hidden">
+    <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+        <i class="fa-solid fa-network-wired absolute top-10 left-10 text-8xl transform -rotate-12"></i>
+        <i class="fa-solid fa-earth-asia absolute bottom-10 right-10 text-9xl"></i>
+    </div>
+    <div class="max-w-3xl mx-auto text-center relative z-10">
+        <span class="inline-block px-4 py-1.5 bg-white/20 rounded-full font-bold mb-6 backdrop-blur-sm border border-white/30 text-base">단원 목차</span>
+        <h1 class="text-4xl md:text-6xl font-black mb-6 leading-tight break-keep">
+            사물 인터넷
+        </h1>
+        <p class="text-lg md:text-xl opacity-90 font-medium max-w-xl mx-auto leading-relaxed break-keep">
+            네 차시를 이어서 보면, 화분 하나가 「목마르다」고 알려 오는 일이<br class="hidden md:block">
+            어떻게 사회 전체를 바꾸는 흐름으로 이어지는지 보입니다.
+        </p>
+    </div>
+</header>
+
+<!-- ── 차시 카드 ── -->
+<main class="max-w-5xl mx-auto px-6 py-16">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <a href="iot_lesson.html" class="lesson-card p-8 flex flex-col gap-4">
+            <div class="flex items-center justify-between">
+                <span class="step-num text-5xl font-black text-sky-500">01</span>
+                <div class="w-12 h-12 bg-sky-100 rounded-xl flex items-center justify-center">
+                    <i class="fa-solid fa-house-signal text-sky-600 text-xl"></i>
+                </div>
+            </div>
+            <div>
+                <h2 class="text-xl font-black text-slate-900 mb-2">사물 인터넷이란 무엇인가</h2>
+                <p class="text-base text-slate-600 leading-relaxed break-keep">
+                    「사물」이 인터넷에 연결되려면 갖춰야 할 자격을 살펴보고, 사물 인터넷의 뜻을 정의합니다.
+                </p>
+            </div>
+        </a>
+
+        <a href="iot_components.html" class="lesson-card p-8 flex flex-col gap-4">
+            <div class="flex items-center justify-between">
+                <span class="step-num text-5xl font-black text-teal-500">02</span>
+                <div class="w-12 h-12 bg-teal-100 rounded-xl flex items-center justify-center">
+                    <i class="fa-solid fa-layer-group text-teal-600 text-xl"></i>
+                </div>
+            </div>
+            <div>
+                <h2 class="text-xl font-black text-slate-900 mb-2">사물 인터넷의 구성 요소</h2>
+                <p class="text-base text-slate-600 leading-relaxed break-keep">
+                    장치, 통신 네트워크, 데이터 플랫폼, 서비스, 보안&mdash; 다섯 가지가 나누어 맡은 일을 알아봅니다.
+                </p>
+            </div>
+        </a>
+
+        <a href="iot_operation_principle.html" class="lesson-card p-8 flex flex-col gap-4">
+            <div class="flex items-center justify-between">
+                <span class="step-num text-5xl font-black text-violet-500">03</span>
+                <div class="w-12 h-12 bg-violet-100 rounded-xl flex items-center justify-center">
+                    <i class="fa-solid fa-diagram-project text-violet-600 text-xl"></i>
+                </div>
+            </div>
+            <div>
+                <h2 class="text-xl font-black text-slate-900 mb-2">사물 인터넷의 동작 원리</h2>
+                <p class="text-base text-slate-600 leading-relaxed break-keep">
+                    측정한 값이 데이터가 되어 사람에게 닿기까지, 구성 요소들이 실제로 맞물려 돌아가는 과정을 따라갑니다.
+                </p>
+            </div>
+        </a>
+
+        <a href="iot_society_change.html" class="lesson-card p-8 flex flex-col gap-4">
+            <div class="flex items-center justify-between">
+                <span class="step-num text-5xl font-black text-amber-500">04</span>
+                <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
+                    <i class="fa-solid fa-earth-asia text-amber-600 text-xl"></i>
+                </div>
+            </div>
+            <div>
+                <h2 class="text-xl font-black text-slate-900 mb-2">사물 인터넷이 바꾸는 삶과 사회</h2>
+                <p class="text-base text-slate-600 leading-relaxed break-keep">
+                    앞서 배운 원리가 실제 생활과 산업, 사회 전반을 어떻게 바꾸어 놓았는지 살펴봅니다.
+                </p>
+            </div>
+        </a>
+
+    </div>
+</main>
+
+<!-- ── 푸터 ── -->
+<footer class="bg-white border-t border-slate-200 mt-4 px-6 py-5">
+    <div class="max-w-6xl mx-auto flex items-center justify-center gap-1">
+        <a href="https://github.com/itmir913/Visual-Assets-for-CS-Teacher" target="_blank" rel="noopener noreferrer"
+           title="GitHub 저장소" aria-label="GitHub 저장소"
+           class="w-11 h-11 grid place-items-center rounded-lg text-slate-500 hover:text-teal-600 hover:bg-slate-100 transition-colors"><svg viewBox="0 0 16 16" class="w-4 h-4" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></a>
+        <span class="text-base text-slate-400 ml-2">&copy; luminousky</span>
+    </div>
+</footer>
+
+</body>
+</html>
