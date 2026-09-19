@@ -440,8 +440,8 @@
                         <rect x="4" y="48" width="568" height="200" rx="18" fill="#fff1f2" stroke="#f43f5e" stroke-width="2.5" stroke-dasharray="8 5"/>
                         <text x="288" y="76" font-size="16" fill="#be123c" font-weight="700" text-anchor="middle">사물 인터넷 보안 &mdash; 넷 전체를 감싼다</text>
                         <rect x="14" y="96" width="112" height="70" rx="12" fill="#e0f2fe" stroke="#0284c7" stroke-width="2.5"/>
-                        <text x="70" y="124" font-size="17" fill="#075985" font-weight="700" text-anchor="middle">사물 인터넷</text>
-                        <text x="70" y="148" font-size="17" fill="#075985" font-weight="700" text-anchor="middle">장치</text>
+                        <text x="70" y="124" font-size="17" fill="#075985" font-weight="700" text-anchor="middle">센서</text>
+                        <text x="70" y="148" font-size="17" fill="#075985" font-weight="700" text-anchor="middle">스마트기기</text>
                         <text x="70" y="192" font-size="16" fill="#64748b" text-anchor="middle">측정하고</text>
                         <text x="70" y="214" font-size="16" fill="#64748b" text-anchor="middle">움직인다</text>
                         <line x1="130" y1="131" x2="155" y2="131" stroke="#334155" stroke-width="2.5" marker-end="url(#iot-a)"/>
@@ -452,8 +452,8 @@
                         <text x="215" y="214" font-size="16" fill="#64748b" text-anchor="middle">실어 나른다</text>
                         <line x1="275" y1="131" x2="300" y2="131" stroke="#334155" stroke-width="2.5" marker-end="url(#iot-a)"/>
                         <rect x="304" y="96" width="112" height="70" rx="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="2.5"/>
-                        <text x="360" y="124" font-size="17" fill="#5b21b6" font-weight="700" text-anchor="middle">데이터</text>
-                        <text x="360" y="148" font-size="17" fill="#5b21b6" font-weight="700" text-anchor="middle">플랫폼</text>
+                        <text x="360" y="124" font-size="17" fill="#5b21b6" font-weight="700" text-anchor="middle">클라우드</text>
+                        <text x="360" y="148" font-size="17" fill="#5b21b6" font-weight="700" text-anchor="middle"></text>
                         <text x="360" y="192" font-size="16" fill="#64748b" text-anchor="middle">쌓아 두고</text>
                         <text x="360" y="214" font-size="16" fill="#64748b" text-anchor="middle">따져 본다</text>
                         <line x1="420" y1="131" x2="445" y2="131" stroke="#334155" stroke-width="2.5" marker-end="url(#iot-a)"/>
@@ -491,16 +491,77 @@
         </div>
     </section>
 
-    <!-- ══════════ 2. 사물 인터넷 장치 ══════════ -->
+
+
+
+
+
+    <!-- ══════════ 사물인터넷 구성요소 ══════════ -->
+    <section id="around" class="scroll-mt-24 space-y-8">
+        <div class="text-center space-y-4">
+            <h2 class="text-3xl font-black text-slate-900">사물인터넷 구성요소</h2>
+            <div class="w-20 h-1.5 bg-teal-500 mx-auto rounded-full"></div>
+        </div>
+
+
+        <div class="section-card space-y-6">
+            
+
+
+            <div class="bg-teal-50 border border-teal-200 border-l-4 border-l-teal-500 rounded-2xl p-6 space-y-3">
+                <p class="font-black text-lg text-sky-900">
+                        <i class="fa-solid fa-house mr-2"></i>센서 및 스마트기기                    </p>
+                    <p class="text-base text-slate-600 leading-relaxed">
+                       <strong>센서</strong>는 온도,습도,압력, 소리, 빛, 거리 등 <strong>현실 세계에 존재하는 물리량 또는 대상물의 정보를 측정해 전기신호로 바꾸는 장치</strong>로, 인간의 각 기관처럼 주변 한경과 상황 정보를 감지한는 역할을 한다.    </p>
+<p class="text-base text-slate-600 leading-relaxed">
+<strong>스마트기기</strong>는 네트워크와 응용 프로그램을 이용하여 기능이 확장된 전자기기로<strong> 다양한 센서를 통해 수집된 정보를 활용</strong>할 수 있다.  스마트 기기에는 우리가 사용하는 스마트폰,스마트TV,스마트워치 등이 있다.   </p>
+            </div>
+
+
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+
+              
+                <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-5 space-y-2">
+                    <p class="font-black text-lg text-emerald-900">
+                        <i class="fa-solid fa-seedling mr-2"></i>통신 및 네트워크                    </p>
+                    <p class="text-base text-slate-600 leading-relaxed">
+                        <strong>모든 사물은 네트워크로 연결되어야 서로 데이터를 주고 받을 수 있으며</strong>, 이 데이터를 저장,가공,공유하여 필요한 서비슬를 사용자에게 제공하기 위해 다양한 통신 및 네트워크 기술이 사용된다.               </p>
+                </div>
+                <div class="bg-violet-50 border border-violet-200 rounded-2xl p-5 space-y-2">
+                    <p class="font-black text-lg text-violet-900">
+                        <i class="fa-solid fa-industry mr-2"></i>클라우드                    </p>
+                    <p class="text-base text-slate-600 leading-relaxed">
+                        <strong>센서를 통해 다양한 정보를 지속적으로 수집, 처리, 분석하여 사용자에게 원하는 정보를 제공</strong>한다.                    </p>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- ══════════ 2. 센서 및 스마트기기 ══════════ -->
     <section id="device" class="scroll-mt-24 space-y-8">
         <div class="text-center space-y-4">
-            <h2 class="text-3xl font-black text-slate-900">사물 인터넷 장치</h2>
+            <h2 class="text-3xl font-black text-slate-900">센서 및 스마트기기</h2>
             <div class="w-20 h-1.5 bg-teal-500 mx-auto rounded-full"></div>
         </div>
 
         <div class="section-card space-y-6">
             <p class="text-base text-slate-700 leading-relaxed">
-                가장 앞에 서서 <strong>데이터를 만들어 내는</strong> 것이 사물 인터넷 장치입니다. 앞 차시에서 본
+                가장 앞에 서서 <strong>데이터를 만들어 내는</strong> 것이 센서 및 스마트 기기입니다. 앞 차시에서 본
                 「사물의 자격 세 가지」를 실제로 갖춘 물건이 바로 이것입니다. 안을 뜯어보면 대개 아래 네 부분이
                 들어 있습니다.
             </p>
@@ -510,9 +571,9 @@
                     <caption class="text-base text-slate-500 text-left mb-2">사물 인터넷 장치 안에 들어 있는 부분들</caption>
                     <thead>
                     <tr>
-                        <th class="w-32">부분</th>
-                        <th>하는 일</th>
-                        <th class="w-40">화분의 경우</th>
+                        <th class="w-40">부분</th>
+                        <th >하는 일</th>
+                        <th >화분의 경우</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -620,7 +681,7 @@
         <div class="section-card space-y-6">
             <p class="text-base text-slate-700 leading-relaxed">
                 장치가 만든 값을 데이터 플랫폼까지 실어 나르는 것이 통신 네트워크입니다. 새로운 기술이 따로 있는
-                것이 아니라, <strong>앞 중단원에서 배운 유선&middot;무선 네트워크를 그대로 씁니다.</strong> 달라지는
+                것이 아니라, <strong> 유선&middot;무선 네트워크를 그대로 씁니다.</strong> 달라지는
                 점은 하나입니다. 컴퓨터를 인터넷에 붙일 때는 대개 고를 것이 없지만, 사물 인터넷에서는
                 <strong>어느 기술을 쓸지 골라야 합니다.</strong>
             </p>
@@ -713,7 +774,7 @@
             </div>
 
             <p class="text-base text-slate-700 leading-relaxed">
-                이렇게 서로 다른 네트워크를 넘나들며 데이터를 넘겨주는 일은 앞 중단원에서 본 라우터와 인터넷
+                이렇게 서로 다른 네트워크를 넘나들며 데이터를 넘겨주는 일은 라우터와 인터넷
                 공유기가 맡습니다. 사물 인터넷을 위해 새로 만든 장치가 아니라, <strong>이미 깔려 있던 인터넷을
                 그대로 빌려 쓰는 것</strong>입니다.
             </p>
@@ -733,14 +794,14 @@
     <!-- ══════════ 4. 데이터 플랫폼 ══════════ -->
     <section id="platform" class="scroll-mt-24 space-y-8">
         <div class="text-center space-y-4">
-            <h2 class="text-3xl font-black text-slate-900">데이터 플랫폼</h2>
+            <h2 class="text-3xl font-black text-slate-900">클라우드</h2>
             <div class="w-20 h-1.5 bg-teal-500 mx-auto rounded-full"></div>
         </div>
 
         <div class="section-card space-y-6">
             <p class="text-base text-slate-700 leading-relaxed">
                 장치가 보낸 값이 도착하는 곳입니다. 하는 일은 크게 두 가지 &mdash; <strong>쌓아 두는 일</strong>과
-                <strong>따져 보는 일</strong>입니다. 여기서 「플랫폼」은 여러 프로그램과 서비스가 <strong>올라타서
+                <strong>따져 보는 일</strong>입니다. 여기서 「클라우드」은 여러 프로그램과 서비스가 <strong>올라타서
                 일할 수 있게 깔아 둔 바닥</strong>이라는 뜻입니다. 어떤 서비스를 얹든 데이터를 받아 두고 꺼내 주는
                 일은 이 바닥이 맡습니다.
             </p>
@@ -1070,47 +1131,18 @@
             </div>
         </div>
 
-        <!-- 퀴즈 3 -->
+      
+        <!-- 퀴즈 4 -->
         <div class="section-card space-y-5">
             <div class="flex items-start gap-4">
                 <div class="w-10 h-10 bg-teal-600 text-white rounded-full flex items-center justify-center font-black text-base shrink-0">
                     Q3
                 </div>
                 <p class="text-lg font-bold text-slate-800 leading-relaxed">
-                    <strong>에지 컴퓨팅</strong>을 쓰는 까닭으로 가장 알맞은 것은?
-                </p>
-            </div>
-            <div class="space-y-3" id="q3">
-                <button class="quiz-btn"
-                        onclick="checkAnswer(this, false, '오래 쌓아 두는 일은 오히려 플랫폼이 잘합니다. 장치 가까이에는 쌓아 둘 자리가 적습니다.')">
-                    ① 데이터를 더 오래 쌓아 두기 위해
-                </button>
-                <button class="quiz-btn"
-                        onclick="checkAnswer(this, true, '맞습니다! 멀리 보내 답을 기다릴 여유가 없는 판단은 데이터가 만들어진 자리에서 곧바로 해야 합니다.')">
-                    ② 멀리 보내 답을 기다릴 시간이 없을 때 곧바로 판단하기 위해
-                </button>
-                <button class="quiz-btn"
-                        onclick="checkAnswer(this, false, '여러 장치의 값을 모아 비교하는 일은 한자리에 모으는 플랫폼이 맡습니다.')">
-                    ③ 여러 장치의 값을 한자리에 모아 비교하기 위해
-                </button>
-                <button class="quiz-btn"
-                        onclick="checkAnswer(this, false, '에지 컴퓨팅은 플랫폼을 대신하는 것이 아니라 급한 판단을 나눠 맡는 방식입니다.')">
-                    ④ 데이터 플랫폼을 아예 없애기 위해
-                </button>
-            </div>
-        </div>
-
-        <!-- 퀴즈 4 -->
-        <div class="section-card space-y-5">
-            <div class="flex items-start gap-4">
-                <div class="w-10 h-10 bg-teal-600 text-white rounded-full flex items-center justify-center font-black text-base shrink-0">
-                    Q4
-                </div>
-                <p class="text-lg font-bold text-slate-800 leading-relaxed">
                     보안을 <strong>다섯 번째 요소로 나란히 두지 않고 전체를 감싸게</strong> 그린 까닭은?
                 </p>
             </div>
-            <div class="space-y-3" id="q4">
+            <div class="space-y-3" id="q3">
                 <button class="quiz-btn"
                         onclick="checkAnswer(this, false, '중요도의 문제가 아닙니다. 나머지 넷도 하나라도 빠지면 시스템이 동작하지 않습니다.')">
                     ① 나머지 넷보다 중요하기 때문에
