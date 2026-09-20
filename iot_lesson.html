@@ -3,119 +3,52 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>사물 인터넷이란 무엇인가</title>
+<title>사물 인터넷 &mdash; 개념정리</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js" crossorigin="anonymous"></script>
-    <style>
-        /* 코드·모노스페이스 요소의 한글이 시스템 기본 글꼴로 떨어지는 것을 막는다.
-           라틴 문자는 모노스페이스, 한글은 Pretendard로 렌더링된다.
+<style>
+    html { scroll-behavior: smooth; }
+    body {
+        font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto,
+        "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic",
+        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+        background-color: #f8fafc;
+    }
+    .hero-gradient { background: linear-gradient(135deg, #0891b2 0%, #0f766e 100%); }
+    .sticky-nav {
+        position: sticky; top: 0; z-index: 100;
+        backdrop-filter: blur(12px);
+        background-color: rgba(255, 255, 255, 0.9);
+        border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+    .section-card {
+        background: white;
+        padding: clamp(1.25rem, 4vw, 2.5rem);
+        border-radius: 2rem;
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+        border: 1px solid #f1f5f9;
+    }
+    .quiz-btn {
+        width: 100%; padding: 1.25rem; text-align: left; border-radius: 1rem;
+        border: 2px solid #e2e8f0; background-color: #f8fafc; font-weight: 500;
+        color: #374151; font-size: 1rem; transition: all 0.25s ease; cursor: pointer;
+    }
+    .quiz-btn:hover { background: #f0fdfa; border-color: #5eead4; }
+    .quiz-btn.correct { background: #0d9488; color: white; border-color: #0d9488; }
+    .quiz-btn.wrong { background: #f43f5e; color: white; border-color: #f43f5e; }
+    .quiz-btn.disabled { opacity: 0.5; pointer-events: none; }
+    .flow-chip {
+        display: flex; align-items: center; gap: 0.5rem;
+        background: #f0fdfa; border: 1px solid #99f6e4; color: #0f766e;
+        border-radius: 999px; padding: 0.5rem 1rem; font-weight: 700; font-size: 0.95rem;
+        white-space: nowrap;
+    }
+    .diagram-box { border: 1px solid #e2e8f0; border-radius: 1rem; background: white; padding: 1rem; }
+    .diagram-box img { display: block; margin: 0 auto; max-width: 100%; height: auto; border-radius: 0.5rem; }
 
-           `code, pre`처럼 요소 선택자만 쓰면 Tailwind CDN이 나중에 주입하는 Preflight의
-           동일 특이도 규칙(`code,kbd,samp,pre{font-family:...}`)에 밀려 한글이 시스템
-           글꼴로 떨어진다. 그래서 `body`를 붙여 특이도를 한 단계 올린다. */
-        body code, body kbd, body samp, body pre,
-        body .font-mono {
-            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono",
-            "Courier New", "Pretendard Variable", Pretendard, "Apple SD Gothic Neo",
-            "Malgun Gothic", monospace;
-        }
 
-        body pre {
-            overflow-x: auto; /* 넘치는 줄은 코드 블록 안에서만 가로 스크롤 */
-            max-width: 100%;
-            min-width: 0; /* flex 자식일 때 정상적으로 줄어들도록 */
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto,
-            "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic",
-            "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
-            background-color: #f8fafc;
-        }
-
-        .hero-gradient {
-            background: linear-gradient(135deg, #0891b2 0%, #0f766e 100%);
-        }
-
-        .sticky-nav {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            backdrop-filter: blur(12px);
-            background-color: rgba(255, 255, 255, 0.9);
-            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        }
-
-        .section-card {
-            background: white;
-            padding: clamp(1.25rem, 4vw, 2.5rem);
-            border-radius: 2rem;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
-            border: 1px solid #f1f5f9;
-            transition: all 0.3s ease;
-        }
-
-        .quiz-btn {
-            width: 100%;
-            padding: 1.25rem;
-            text-align: left;
-            border-radius: 1rem;
-            border: 2px solid #e2e8f0;
-            background-color: #f8fafc;
-            font-weight: 500;
-            color: #374151;
-            font-size: 1rem;
-            transition: all 0.25s ease;
-            cursor: pointer;
-        }
-
-        .quiz-btn:hover {
-            background: #f0fdfa;
-            border-color: #5eead4;
-        }
-
-        .quiz-btn.correct {
-            background: #0d9488;
-            color: white;
-            border-color: #0d9488;
-        }
-
-        .quiz-btn.wrong {
-            background: #f43f5e;
-            color: white;
-            border-color: #f43f5e;
-        }
-
-        .quiz-btn.disabled {
-            opacity: 0.5;
-            pointer-events: none;
-        }
-
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9;
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-
-        table {
+ table {
             border-collapse: collapse;
             width: 100%;
         }
@@ -149,75 +82,10 @@
             min-width: 32rem;
         }
 
-        /* 프로그램·사이트 안의 고유 이름을 본문과 구별해 표시한다.
 
-           `font-mono`를 쓰지 않는다. 화면에 적힌 이름은 코드가 아니라서 모노스페이스로 두면
-           코드처럼 읽히고 한글 본문과 글꼴이 튀어 문장이 끊긴다.
-           `inline-block` + `nowrap`은 긴 이름이 375px를 뚫으므로 쓰지 않는다. */
-        .widget-name,
-        .attr-name {
-            display: inline;
-            -webkit-box-decoration-break: clone;
-            box-decoration-break: clone;
-            font-weight: 700;
-            border-radius: 0.5rem;
-            padding: 0.05rem 0.45rem;
-            letter-spacing: 0.01em;
-        }
 
-        .widget-name { /* 메뉴 이름 · 설정 이름 */
-            color: #9a3412;
-            background: #ffedd5;
-            border: 1px solid #fdba74;
-        }
 
-        .attr-name { /* 파일명 · 속성명 */
-            color: #334155;
-            background: #f1f5f9;
-            border: 1px solid #cbd5e1;
-        }
-
-        /* 외부 사이트 주소는 반드시 눌러서 갈 수 있어야 한다. 학생이 주소를 손으로 옮겨 적게 두지 않는다.
-           긴 주소가 375px를 뚫으므로 break-all을 함께 준다. */
-        a.ext-link {
-            color: #4338ca;
-            font-weight: 600;
-            text-decoration: underline;
-            text-underline-offset: 2px;
-            word-break: break-all;
-        }
-
-        a.ext-link:hover {
-            color: #312e81;
-        }
-
-        /* 차트 예시 그림. 글자를 넣지 않고 도형만 그린 뒤 설명은 HTML로 붙인다.
-           SVG 안의 글자는 375px에서 뷰박스와 함께 줄어들어 최소 글자 크기 규칙을 어긴다. */
-        .chart-svg {
-            width: 100%;
-            height: auto;
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 0.75rem;
-        }
-
-        details > summary {
-            cursor: pointer;
-            list-style: none;
-        }
-
-        details > summary::-webkit-details-marker {
-            display: none;
-        }
-
-        details[open] > summary .details-chevron {
-            transform: rotate(90deg);
-        }
-
-        .details-chevron {
-            transition: transform 0.2s ease;
-        }
-    </style>
+</style>
 
 <style>
     :root { color-scheme: light dark; }
@@ -346,24 +214,26 @@
     /* Responsive: keep wide tables scrollable within their own container only */
     .overflow-x-auto { max-width: 100%; }
 </style>
+
 </head>
 <body class="text-slate-900">
 
 <!-- ── Hero ── -->
-<header id="intro" class="hero-gradient text-white py-32 px-6 relative overflow-hidden">
+<header id="intro" class="hero-gradient text-white py-28 px-6 relative overflow-hidden">
     <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
         <i class="fa-solid fa-house-signal absolute top-10 left-10 text-8xl transform -rotate-12"></i>
-        <i class="fa-solid fa-microchip absolute bottom-10 right-10 text-9xl"></i>
+        <i class="fa-solid fa-cloud absolute bottom-10 right-10 text-9xl"></i>
     </div>
     <div class="max-w-4xl mx-auto text-center relative z-10">
-        <span class="inline-block px-4 py-1.5 bg-white/20 rounded-full font-bold mb-6 backdrop-blur-sm border border-white/30 text-base">정보</span>
+        <span class="inline-block px-4 py-1.5 bg-white/20 rounded-full font-bold mb-6 backdrop-blur-sm border border-white/30 text-base">개념정리</span>
         <h1 class="text-4xl md:text-6xl font-black mb-6 leading-tight break-keep">
             사물 인터넷이란 무엇인가
         </h1>
-        <p class="text-lg md:text-xl opacity-90 font-medium max-w-2xl mx-auto leading-relaxed">
-            인터넷에 연결된 전구는 많습니다.<br>
-            그런데 <strong>전구가 먼저 말을 거는</strong> 쪽은 어떨까요?
+        <p class="text-lg md:text-xl opacity-90 font-medium max-w-2xl mx-auto leading-relaxed break-keep">
+            센서가 모은 정보가 클라우드를 거쳐<br class="hidden md:block">
+            우리 삶을 어떻게 바꾸는지 정리합니다.
         </p>
+        <p class="mt-6 text-sm font-bold text-white/70 tracking-wide">정보 개념정리 &middot; Ⅰ. 컴퓨팅 시스템 (교과서 22&ndash;29쪽) &middot; 미래엔</p>
     </div>
 </header>
 
@@ -408,42 +278,45 @@
 <!-- ── 메인 콘텐츠 ── -->
 <main class="max-w-6xl mx-auto px-4 sm:px-6 py-20 space-y-24">
 
-    <!-- ══════════ 1. 누가 시켰는가 ══════════ -->
-    <section id="remote" class="scroll-mt-24 space-y-8">
+    <!-- ══════════ 학습 흐름도 ══════════ -->
+    <section class="space-y-6">
+        <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+            <span class="flow-chip"><i class="fa-solid fa-1"></i>사물 인터넷의 개념</span>
+            <i class="fa-solid fa-chevron-right text-teal-400"></i>
+            <span class="flow-chip"><i class="fa-solid fa-2"></i>구성과 동작 원리</span>
+            <i class="fa-solid fa-chevron-right text-teal-400"></i>
+            <span class="flow-chip"><i class="fa-solid fa-3"></i>삶의 변화</span>
+        </div>
+    </section>
+
+    <!-- ══════════ 1. 사물 인터넷의 개념 ══════════ -->
+    <section id="concept" class="scroll-mt-24 space-y-8">
         <div class="text-center space-y-4">
-            <h2 class="text-3xl font-black text-slate-900">누가 시켰는가</h2>
+            <h2 class="text-3xl font-black text-slate-900">사물 인터넷이란 무엇일까?</h2>
             <div class="w-20 h-1.5 bg-teal-500 mx-auto rounded-full"></div>
         </div>
 
         <div class="section-card space-y-6">
-            <p class="text-base text-slate-700 leading-relaxed">
-                방의 전등을 켜는 방법을 떠올려 봅시다. 벽에 붙은 스위치를 누를 수도 있고, 리모컨의 버튼을
-                누를 수도 있고, 스마트폰 앱에서 「거실 등 켜기」를 누를 수도 있습니다. 세 방법은 서로 많이
-                달라 보이지만 한 가지가 똑같습니다. <strong>셋 다 사람이 손으로 시작했다</strong>는 것입니다.
-                스위치든 리모컨이든 앱이든, 사람이 누르기 전까지 전등은 아무 일도 하지 않습니다.
-            </p>
-
-            <p class="text-base text-slate-700 leading-relaxed">
-                이제 네 번째 방법을 생각해 봅시다. 침대에 무게를 측정하는 장치가 붙어 있어서, 사람이 일어나 침대에서
-                내려오면 무게가 줄어드는 것을 알아챕니다. 침대는 이 사실을 전등에게 알립니다. 전등은 그 소식을
-                받고 스스로 켜집니다. 이번에는 사람이 아무것도 누르지 않았습니다. 사람이 한 일은 <strong>잠에서
-                깬 것</strong>뿐입니다.
-            </p>
-
-            <hr class="border-slate-200">
-
-            <div class="bg-teal-50 border border-teal-200 border-l-4 border-l-teal-500 rounded-2xl p-6 space-y-3">
-                <p class="font-black text-lg text-teal-900">사물 인터넷(IoT, Internet of Things)</p>
+            <div class="bg-teal-50 border-2 border-teal-300 rounded-2xl p-6 space-y-3">
+                <p class="font-black text-lg text-teal-900">
+                    <i class="fa-solid fa-tag mr-2"></i>사물 인터넷(IoT: Internet of Things)
+                </p>
                 <p class="text-base text-slate-700 leading-relaxed">
-                  
-<strong>(사물끼리 직접) 센서를 통해 데이터를 수집</strong>하고 <strong>네트워크 기술을 이용하여 전달</strong>하고, 서버에서 데이터를 분석,공유,학습하여 <strong>사용자에게 정보를 제공하거나 주변의 사물을 제어</strong>하는 것
-
-
+                   사물끼리 직접 <strong> 센서</strong>를 통해 데이터를 수집하고 <strong>네트워크 기술</strong>을 이용하여 전달하고,
+                    <strong>서버</strong>에서 데이터를 분석&middot;공유&middot;학습하여 사용자에게 정보를 제공하거나
+                    주변의 사물을 제어하는 것을 말한다.
                 </p>
             </div>
 
             <p class="text-base text-slate-700 leading-relaxed">
-                정의에서 가장 중요한 말은 <strong>「사물끼리 직접」</strong>입니다. 이 말이 빠지면 인터넷에 연결된
+                정의를 한 문장으로 풀어 보면, 사물 인터넷은 <strong>「감지 &rarr; 전달 &rarr; 분석 &rarr; 제공(제어)」</strong>
+                네 단계가 이어진 흐름입니다. 센서가 무언가를 감지하지 못하면 애초에 데이터가 생기지 않고,
+                네트워크가 없으면 그 데이터는 감지한 자리에 머무르며, 서버의 분석이 없으면 데이터는 숫자로만 남습니다.
+            </p>
+
+        </div>
+<p>
+        정의에서 가장 중요한 말은 <strong>「사물끼리 직접」</strong>입니다. 이 말이 빠지면 인터넷에 연결된
                 모든 기기가 사물 인터넷이 되어 버립니다. 스마트폰으로 영화를 보는 것도, 노트북으로 검색을 하는 것도
                 인터넷에 연결해서 하는 일이지만, 그 데이터는 전부 <strong>사람이 요청해서</strong> 오갑니다.
                 사물 인터넷에서는 사람이 요청하지 않은 데이터가 사물과 사물 사이를 오갑니다.
@@ -485,30 +358,21 @@
                 </p>
             </div>
 
-            <div class="bg-slate-100 border border-slate-300 rounded-2xl p-6 space-y-3">
-                <p class="font-black text-lg text-slate-800">
-                    <i class="fa-solid fa-triangle-exclamation text-slate-500 mr-2"></i>사람이 사라진 것이 아니라, 자리를 옮긴 것입니다
-                </p>
-                <p class="text-base text-slate-700 leading-relaxed">
-                    오른쪽 그림에서 사람이 점선이 된 것은 <strong>그 순간에</strong> 아무것도 누르지 않았다는 뜻이지,
-                    사람이 필요 없다는 뜻이 아닙니다. 「침대에서 무게가 줄어들면 전등을 켠다」는 규칙은 누군가가
-                    <strong>미리 정해 둔 것</strong>입니다. 사물 인터넷은 사람의 판단을 없애는 기술이 아니라,
-                    사람이 판단을 <strong>미리 한 번</strong> 해 두면 그 뒤로는 사물이 알아서 실행하게 만드는 기술입니다.
-                    그래서 규칙을 잘못 정해 두면 사물도 계속 잘못 동작합니다.
-                </p>
-            </div>
-        </div>
-
         <div class="bg-sky-50 border border-sky-200 border-l-4 border-l-sky-500 rounded-2xl px-6 py-5 flex flex-col sm:flex-row gap-4 items-start sm:items-center">
             <span class="shrink-0 bg-sky-500 text-white font-bold text-base px-4 py-1.5 rounded-full whitespace-nowrap">
                 <i class="fa-solid fa-circle-question mr-1"></i>스스로 확인
             </span>
             <p class="text-base text-sky-900 font-medium leading-relaxed">
+                집 안의 온도계가 온도를 재기만 하고 어디로도 전달하지 않는다면, 이것을 사물 인터넷이라고 부를 수 있을까요?
+            <br>
+<br>
                 스마트폰 앱으로 집 밖에서 보일러를 켜는 것은 사물 인터넷이라고 부르기 어렵습니다. 위의 정의에서
                 어느 부분에 걸리기 때문일까요?
             </p>
         </div>
     </section>
+
+
 
     <!-- ══════════ 2. 「사물」의 자격 ══════════ -->
     <section id="things" class="scroll-mt-24 space-y-8">
@@ -1055,3 +919,7 @@
 </script>
 </body>
 </html>
+
+
+
+

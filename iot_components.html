@@ -7,12 +7,7 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js" crossorigin="anonymous"></script>
     <style>
-        /* 코드·모노스페이스 요소의 한글이 시스템 기본 글꼴로 떨어지는 것을 막는다.
-           라틴 문자는 모노스페이스, 한글은 Pretendard로 렌더링된다.
-
-           `code, pre`처럼 요소 선택자만 쓰면 Tailwind CDN이 나중에 주입하는 Preflight의
-           동일 특이도 규칙(`code,kbd,samp,pre{font-family:...}`)에 밀려 한글이 시스템
-           글꼴로 떨어진다. 그래서 `body`를 붙여 특이도를 한 단계 올린다. */
+      
         body code, body kbd, body samp, body pre,
         body .font-mono {
             font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono",
@@ -377,8 +372,8 @@
             <div>
                 <p class="font-black text-base text-slate-500 mb-2 uppercase tracking-widest">학습 목표</p>
                 <ol class="space-y-1 text-base font-medium text-slate-800 list-decimal list-outside pl-5">
-                    <li>사물 인터넷 시스템을 이루는 다섯 가지 &mdash; 장치와 통신 네트워크, 데이터를 모으는 플랫폼, 그리고 서비스와 보안 &mdash; 를 들고 각각이 맡은 일을 설명할 수 있다.</li>
-                    <li>모은 데이터를 왜 장치 안에 두지 않고 멀리 있는 플랫폼으로 보내는지, 그 이유를 데이터의 양과 계산 능력으로 설명할 수 있다.</li>
+                    <li>사물 인터넷 시스템을 이루는 다섯 가지 &mdash; 장치와 통신 네트워크, 데이터를 모으는 클라우드, 그리고 서비스와 보안 &mdash; 를 들고 각각이 맡은 일을 설명할 수 있다.</li>
+                    <li>모은 데이터를 왜 장치 안에 두지 않고 멀리 있는 클라우드로 보내는지, 그 이유를 데이터의 양과 계산 능력으로 설명할 수 있다.</li>
                     <li>보안이 나머지 넷과 나란히 놓이지 않고 전체에 걸쳐 있는 까닭을 말할 수 있다.</li>
                 </ol>
             </div>
@@ -490,6 +485,15 @@
             </p>
         </div>
     </section>
+
+
+
+
+
+
+
+
+
 
 
 
