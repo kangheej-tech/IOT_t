@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>body{margin:0}[hidden]{display:none!important}</style>
+<title>사물 인터넷 사례집</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
+<style>
+  :root {
+    --bg: #f3f8f8;
+    --surface: #ffffff;
+    --surface-2: #eaf3f3;
+    --ink: #0e2a2e;
+    --muted: #48626a;
+    --line: #d5e3e4;
+    --accent: #0f766e;
+    --accent-2: #0891b2;
+    --accent-soft: #e0f4f1;
+    --hero-a: #0891b2;
+    --hero-b: #0f766e;
+    --on-hero: #ffffff;
+    --d: #0f766e;  --d-soft: #dcf3ef;
+    --n: #0369a1;  --n-soft: #dcecf8;
+    --p: #6d28d9;  --p-soft: #ebe4fa;
+    --a: #a21caf;  --a-soft: #f8e1fa;
+    --c: #b45309;  --c-soft: #faead2;
+    --on-badge: #ffffff;
+    --ok: #0f766e; --ok-soft: #d6f2ec;
+    --bad: #be123c; --bad-soft: #fde4ea;
+    --shadow: 0 1px 2px rgba(14,42,46,.06), 0 6px 20px -8px rgba(14,42,46,.12);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0a181b; --surface: #112529; --surface-2: #163035;
+      --ink: #e6f2f2; --muted: #9db6ba; --line: #24434a;
+      --accent: #2dd4bf; --accent-2: #38bdf8; --accent-soft: #10353a;
+      --hero-a: #0b5f73; --hero-b: #0b4f4a; --on-hero: #f2fbfb;
+      --d: #2dd4bf; --d-soft: #113a3a;
+      --n: #5cc0f5; --n-soft: #10344a;
+      --p: #b39dfa; --p-soft: #2a2350;
+      --a: #f0abfc; --a-soft: #3b1a46;
+      --c: #fbbf24; --c-soft: #3d3016;
+      --on-badge: #06222a;
+      --ok: #2dd4bf; --ok-soft: #113a3a;
+      --bad: #fb7185; --bad-soft: #431a27;
+      --shadow: none;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0a181b; --surface: #112529; --surface-2: #163035;
+    --ink: #e6f2f2; --muted: #9db6ba; --line: #24434a;
+    --accent: #2dd4bf; --accent-2: #38bdf8; --accent-soft: #10353a;
+    --hero-a: #0b5f73; --hero-b: #0b4f4a; --on-hero: #f2fbfb;
+    --d: #2dd4bf; --d-soft: #113a3a;
+    --n: #5cc0f5; --n-soft: #10344a;
+    --p: #b39dfa; --p-soft: #2a2350;
+      --a: #f0abfc; --a-soft: #3b1a46;
+    --c: #fbbf24; --c-soft: #3d3016;
+    --on-badge: #06222a;
+    --ok: #2dd4bf; --ok-soft: #113a3a;
+    --bad: #fb7185; --bad-soft: #431a27;
+    --shadow: none;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: "Noto Sans KR", "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+    font-size: 16px; line-height: 1.75; word-break: keep-all; overflow-wrap: anywhere;
+    padding-inline: 16px;
+  }
+  .wrap { max-width: 1240px; margin: 0 auto; padding-block: 20px 56px; }
+  h1, h2, h3, h4, p { margin: 0; }
+  h1, h2, h3 { text-wrap: balance; line-height: 1.3; }
+  .mono { font-family: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+  :focus-visible { outline: 3px solid var(--accent-2); outline-offset: 2px; border-radius: 6px; }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--hero-a) 0%, var(--hero-b) 100%);
+    color: var(--on-hero); border-radius: 24px; padding: clamp(24px, 5vw, 44px);
+  }
+  .eyebrow { font-size: 13px; letter-spacing: .06em; font-weight: 700; opacity: .85; }
+  .hero h1 { font-size: clamp(28px, 5.2vw, 44px); font-weight: 900; margin-top: 8px; letter-spacing: -.01em; }
+  .hero p.lead { margin-top: 12px; max-width: 46em; opacity: .92; font-size: clamp(15px, 2vw, 17px); }
+  .hero .goal {
+    margin-top: 20px; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.28);
+    border-radius: 14px; padding: 12px 16px; font-size: 15px;
+  }
+  .hero .goal b { font-weight: 700; margin-right: 6px; }
+
+  /* Loop recap */
+  .recap { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 8px 6px; align-items: center; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; padding: 6px 14px 6px 6px;
+    background: var(--surface); border: 1px solid var(--line); font-weight: 700; font-size: 14px; color: var(--ink);
+  }
+  .chip i {
+    font-style: normal; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center;
+    color: var(--on-badge); font-weight: 900; font-size: 13px;
+  }
+  .chip.d i { background: var(--d); } .chip.n i { background: var(--n); }
+  .chip.p i { background: var(--p); } .chip.a i { background: var(--a); } .chip.c i { background: var(--c); }
+  .arr { color: var(--muted); font-weight: 700; }
+
+  /* P vs A */
+  .split { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 12px; margin-top: 14px; }
+  .split > div { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; font-size: 14.5px; line-height: 1.65; }
+  .split .h { display: flex; align-items: center; gap: 10px; font-weight: 900; font-size: 16px; margin-bottom: 4px; }
+  .split .h i { font-style: normal; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; color: var(--on-badge); font-size: 14px; }
+  .split .p i { background: var(--p); } .split .a i { background: var(--a); }
+  .split small { display: block; margin-top: 6px; color: var(--muted); font-size: 13px; }
+
+  /* Tabs */
+  .tabs-bar {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; margin: 22px -16px 0; padding: 10px 16px;
+    background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .tabs { display: flex; gap: 8px; overflow-x: auto; max-width: 1240px; margin: 0 auto; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    flex: none; font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; color: var(--muted);
+    background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 8px 16px; min-height: 40px;
+  }
+  .tab:hover { border-color: var(--accent); color: var(--ink); }
+  .tab[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-badge); }
+  .tab .no { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12px; margin-right: 6px; opacity: .75; }
+
+  /* Panels */
+  .panel { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; margin-top: 24px; }
+  .panel[hidden] { display: none; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: clamp(18px, 3.5vw, 32px); box-shadow: var(--shadow); }
+  .case-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; }
+  .case-head h2 { font-size: clamp(24px, 4vw, 32px); font-weight: 900; letter-spacing: -.01em; }
+  .case-head .tag { color: var(--accent); font-weight: 700; }
+  .summary { margin-top: 12px; max-width: 44em; color: var(--ink); }
+  .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 10px; margin-top: 18px; }
+  .fact { background: var(--surface-2); border-radius: 12px; padding: 10px 14px; }
+  .fact dt { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: .04em; }
+  .fact dd { margin: 2px 0 0; font-weight: 500; font-size: 15px; line-height: 1.55; }
+
+  .sec-title { font-size: 20px; font-weight: 900; }
+  .sec-sub { color: var(--muted); font-size: 14px; margin-top: 2px; }
+  .sec-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; justify-content: space-between; }
+  .btn {
+    font: inherit; font-weight: 700; font-size: 14px; cursor: pointer; color: var(--accent);
+    background: var(--accent-soft); border: 1px solid transparent; border-radius: 999px; padding: 8px 16px; min-height: 40px;
+  }
+  .btn:hover { border-color: var(--accent); }
+
+  /* Flow */
+  .steps { display: grid; gap: 30px; margin-top: 20px; grid-template-columns: 1fr; }
+  .step {
+    position: relative; border: 2px solid var(--line); border-radius: 16px; padding: 16px; background: var(--surface);
+    transition: border-color .25s, background-color .25s, transform .25s;
+  }
+  .step::after {
+    content: "↓"; position: absolute; left: 50%; bottom: -27px; transform: translateX(-50%);
+    color: var(--muted); font-weight: 700; font-size: 20px; line-height: 1;
+  }
+  .step:last-child::after { content: none; }
+  .step .top { display: flex; align-items: center; gap: 10px; }
+  .badge {
+    width: 40px; height: 40px; border-radius: 50%; flex: none; display: grid; place-items: center;
+    color: var(--on-badge); font-weight: 900; font-size: 18px;
+  }
+  .step h4 { font-size: 16px; font-weight: 900; }
+  .step .thing { font-size: 13px; font-weight: 700; }
+  .step p.body { margin-top: 10px; font-size: 14.5px; line-height: 1.7; }
+  .sample {
+    margin-top: 12px; border-radius: 10px; padding: 8px 10px; font-size: 12.5px; line-height: 1.55;
+    background: var(--surface-2); color: var(--ink); overflow-wrap: anywhere;
+  }
+  .sample small { display: block; font-family: "Noto Sans KR", sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .04em; color: var(--muted); margin-bottom: 2px; }
+  .step.d .badge { background: var(--d); } .step.d .thing { color: var(--d); }
+  .step.n .badge { background: var(--n); } .step.n .thing { color: var(--n); }
+  .step.p .badge { background: var(--p); } .step.p .thing { color: var(--p); }
+  .step.a .badge { background: var(--a); } .step.a .thing { color: var(--a); }
+  .step.c .badge { background: var(--c); } .step.c .thing { color: var(--c); }
+  .step.d.on { border-color: var(--d); background: var(--d-soft); }
+  .step.n.on { border-color: var(--n); background: var(--n-soft); }
+  .step.p.on { border-color: var(--p); background: var(--p-soft); }
+  .step.a.on { border-color: var(--a); background: var(--a-soft); }
+  .step.c.on { border-color: var(--c); background: var(--c-soft); }
+  .step.on { transform: translateY(-3px); }
+
+  @media (min-width: 1180px) {
+    .steps { grid-template-columns: repeat(5, 1fr); gap: 30px; }
+    .step { padding: 14px; }
+    .step p.body { font-size: 14px; }
+    .step::after { content: "→"; left: auto; right: -25px; bottom: auto; top: 26px; transform: none; }
+  }
+
+  /* Pros / limits / future */
+  .trio { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 14px; margin-top: 16px; }
+  .col h4 { font-size: 15px; font-weight: 900; padding-bottom: 8px; border-bottom: 2px solid var(--line); }
+  .col.pro h4 { color: var(--ok); border-color: var(--ok); }
+  .col.lim h4 { color: var(--c); border-color: var(--c); }
+  .col.fut h4 { color: var(--n); border-color: var(--n); }
+  .col ul { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 10px; }
+  .col li { font-size: 14.5px; line-height: 1.65; padding-left: 14px; position: relative; }
+  .col li::before { content: ""; position: absolute; left: 0; top: .75em; width: 6px; height: 6px; border-radius: 50%; background: var(--line); }
+  .col.pro li::before { background: var(--ok); } .col.lim li::before { background: var(--c); } .col.fut li::before { background: var(--n); }
+
+  /* Think */
+  .think { background: var(--accent-soft); border-color: transparent; }
+  .think .q { margin-top: 8px; font-weight: 500; }
+  details { margin-top: 12px; }
+  summary {
+    cursor: pointer; font-weight: 700; color: var(--accent); min-height: 40px; display: inline-flex; align-items: center;
+    padding: 4px 0; list-style: none;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::before { content: "▸"; margin-right: 8px; transition: transform .2s; }
+  details[open] summary::before { transform: rotate(90deg); }
+  .ans { margin-top: 6px; padding: 12px 14px; background: var(--surface); border-radius: 12px; font-size: 15px; }
+
+  /* Quiz */
+  .quiz-list { display: grid; gap: 22px; margin-top: 16px; }
+  .qn { font-weight: 700; }
+  .qn span { color: var(--accent); margin-right: 6px; font-family: "IBM Plex Mono", ui-monospace, monospace; }
+  .opts { display: grid; gap: 8px; margin-top: 10px; }
+  .opt {
+    font: inherit; font-size: 15px; text-align: left; cursor: pointer; width: 100%; color: var(--ink);
+    background: var(--surface-2); border: 2px solid var(--line); border-radius: 12px; padding: 12px 16px; min-height: 48px;
+    transition: border-color .2s, background-color .2s;
+  }
+  .opt:hover:not(:disabled) { border-color: var(--accent); }
+  .opt:disabled { cursor: default; }
+  .opt.correct { background: var(--ok-soft); border-color: var(--ok); font-weight: 700; }
+  .opt.wrong { background: var(--bad-soft); border-color: var(--bad); }
+  .opt.dim { opacity: .55; }
+  .fb { margin-top: 10px; padding: 10px 14px; border-radius: 12px; font-size: 14.5px; }
+  .fb.ok { background: var(--ok-soft); } .fb.no { background: var(--bad-soft); }
+  .fb b { margin-right: 6px; }
+  .score { margin-top: 14px; font-weight: 700; color: var(--muted); font-size: 14px; }
+
+  /* Compare table */
+  .tbl-wrap { overflow-x: auto; margin-top: 16px; border: 1px solid var(--line); border-radius: 14px; }
+  table { border-collapse: collapse; width: 100%; min-width: 900px; font-size: 14px; line-height: 1.6; }
+  th, td { padding: 12px 14px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+  thead th { background: var(--surface-2); font-weight: 900; font-size: 13px; position: sticky; top: 0; }
+  thead th .l { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; color: var(--on-badge); font-size: 12px; margin-right: 6px; }
+  tbody tr:last-child td { border-bottom: 0; }
+  tbody th { font-weight: 900; white-space: nowrap; }
+  .insight { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 14px; margin-top: 16px; }
+  .insight div { background: var(--surface-2); border-radius: 14px; padding: 14px 16px; font-size: 14.5px; }
+  .insight b { display: block; margin-bottom: 4px; font-size: 15px; }
+  .design-box { border: 2px dashed var(--accent); border-radius: 16px; padding: 16px 18px; margin-top: 16px; background: var(--surface); }
+  .design-box ol { margin: 8px 0 0; padding-left: 1.3em; display: grid; gap: 4px; font-size: 15px; }
+
+  footer { margin-top: 32px; color: var(--muted); font-size: 13px; text-align: center; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; scroll-behavior: auto !important; }
+    .step.on { transform: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow">Ⅰ. 컴퓨팅 시스템 · 2. 사물 인터넷 시스템</div>
+    <h1>사물 인터넷 사례집</h1>
+    <p class="lead">스마트 화분에서 배운 데이터의 흐름이 우리 생활 곳곳에서 어떻게 반복되는지, 다섯 가지 사례로 확인해 봅니다.</p>
+    <div class="goal"><b>학습 목표</b>여러 사물 인터넷 사례를 데이터 수집 → 전달 → 처리 → 분석 → 서비스 제공의 흐름으로 분석하여 설명할 수 있다.</div>
+  </header>
+
+  <div class="recap" aria-label="사물 인터넷 동작 원리 요약">
+    <span class="chip d"><i>D</i>데이터 수집</span><span class="arr">→</span>
+    <span class="chip n"><i>N</i>데이터 전달</span><span class="arr">→</span>
+    <span class="chip p"><i>P</i>데이터 처리</span><span class="arr">→</span>
+    <span class="chip a"><i>A</i>데이터 분석</span><span class="arr">→</span>
+    <span class="chip c"><i>C</i>서비스 제공</span>
+  </div>
+
+  <div class="split" aria-label="처리와 분석의 차이">
+    <div class="p"><div class="h"><i>P</i>데이터 처리 — 쓸 수 있게 다듬기</div>전달받은 값을 정리하고 저장하는 단계입니다. 튄 값이나 빠진 값을 걸러 내고, 단위와 형식을 맞추고, 사물과 시각을 짝지어 저장합니다.<small>핵심 질문: 이 데이터를 믿고 쓸 수 있는 상태인가?</small></div>
+    <div class="a"><div class="h"><i>A</i>데이터 분석 — 의미 찾기</div>정리된 데이터를 기준값이나 과거 데이터와 비교하고 여러 데이터를 함께 살펴 "수분이 부족하다"와 같은 유용한 정보를 만드는 단계입니다.<small>핵심 질문: 이 데이터는 무엇을 뜻하는가?</small></div>
+  </div>
+
+  <div class="tabs-bar"><div class="tabs" role="tablist" id="tabs" aria-label="사례 선택"></div></div>
+  <main id="panels"></main>
+  <footer>스마트 화분 동작 원리 학습 자료를 바탕으로 학급 수업용으로 재구성했으며, 원본의 「데이터 처리 및 분석」 단계를 처리(P)와 분석(A)으로 나누었습니다. 수치와 기준값은 이해를 돕기 위한 예시입니다.</footer>
+</div>
+
+<script>
+(function () {
+  var STAGES = [
+    { k: 'D', cls: 'd', name: '데이터 수집' },
+    { k: 'N', cls: 'n', name: '데이터 전달' },
+    { k: 'P', cls: 'p', name: '데이터 처리' },
+    { k: 'A', cls: 'a', name: '데이터 분석' },
+    { k: 'C', cls: 'c', name: '서비스 제공' }
+  ];
+  var OPT4 = ['① D (데이터 수집)', '② N (데이터 전달)', '③ P (데이터 처리)', '④ A (데이터 분석)', '⑤ C (서비스 제공)'];
+
+  var CASES = [
+    {
+      id: 'home', tab: '스마트 홈', name: '스마트 홈 환기 시스템', tag: '생활 · 실내 공기',
+      summary: '실내 공기질 측정기의 이산화탄소(CO₂) 센서에서 수집한 데이터를 전송한다. 전송받은 CO₂ 농도가 기준값을 넘으면 환기가 필요하다고 판단하여 스마트 기기에 환기 시기를 알려 주는 서비스를 제공한다.',
+      facts: [['대표 센서', 'CO₂ · 온습도 센서'], ['주요 통신', 'Wi-Fi, 지그비, 블루투스']],
+      D: { thing: '공기질 측정기', body: '거실 벽에 놓인 측정기의 CO₂·온습도 센서가 공기 속 이산화탄소 농도를 전기 신호로 바꾸어 측정합니다. 눈에 보이지 않던 공기 상태가 처음으로 숫자가 되는 지점입니다.', sample: 'CO₂ 1,180 ppm · 26.4 °C · 습도 58 %' },
+      N: { thing: '공유기 · 홈 허브', body: '측정된 값이 집 안의 Wi-Fi 공유기(또는 홈 허브)를 거쳐 인터넷 너머의 클라우드 서버까지 이동합니다. 측정기와 서버를 이어 주는 길입니다.', sample: '측정기 → 공유기 → 인터넷 → 서버' },
+      P: { thing: "클라우드 서버 (수신·저장)", job: "튄 값 제거 · ppm 단위 통일 · 저장", body: "서버가 받은 값을 쓸 수 있게 정리합니다. 갑자기 튄 이상한 값(센서 오류)을 걸러 내고, 단위를 ppm으로 맞추고, 측정 시각과 함께 저장합니다. 아직 \"높다, 낮다\"를 판단하지는 않고 분석할 수 있도록 데이터를 준비하는 단계입니다.", sample: "air-01 · 1180 → 1,180 ppm · 오류값 없음 · 14:32 저장" },
+      A: { thing: "공기질 분석 프로그램", job: "기준값 비교 · 변화 살피기 → 환기 필요", body: "정리된 값을 기준값(예: 1,000 ppm)과 비교하고 최근 30분 동안의 변화까지 살펴서 \"환기가 필요한가, 아닌가\"라는 판단으로 바꾸어 냅니다. 여기서 비로소 숫자가 의미를 갖습니다.", sample: "1,180 > 1,000 · 30분간 계속 상승 → 환기 필요" },
+      C: { thing: '스마트폰 앱', body: '서버의 판단이 "거실 공기가 탁해졌어요. 환기가 필요해요."라는 알림으로 스마트폰 화면에 나타납니다.', sample: '알림: 거실 CO₂ 1,180 ppm — 환기가 필요해요' },
+      pros: ['눈에 보이지 않는 공기 상태를 숫자로 확인하여 환기 시점을 놓치지 않는다.', '외출 중에도 스마트폰으로 집 안 공기 상태를 확인할 수 있다.', '환기 전후의 데이터가 쌓여 집 안 공기 관리 습관을 돌아볼 수 있다.'],
+      limits: ['센서는 시간이 지나면 오차가 생겨 주기적인 보정이 필요하다.', '제조사마다 통신 규격이 달라 기기끼리 호환되지 않는 경우가 있다.', '인터넷이 끊기면 밖에서 공기 상태를 확인하기 어렵다.'],
+      future: ['사용자가 정해 둔 규칙(예: 1,000 ppm 초과 시 자동 환기)에 따라 사람이 누르지 않아도 스스로 작동하는 자동화가 확대된다.', '제조사가 달라도 함께 쓸 수 있는 공통 표준(예: Matter)이 보급되고 있다.'],
+      think: { q: "CO₂ 센서 값이 갑자기 5,000 ppm으로 튀었다가 바로 다음 측정에서 다시 700 ppm으로 돌아왔습니다. 이 값을 그대로 분석하면 어떤 문제가 생길까요? 처리 단계에서는 어떻게 다루면 좋을까요?", a: "실제로는 환기가 필요하지 않은데 잘못된 알림이 전달될 수 있습니다. 처리 단계에서 앞뒤 값과 비교하여 갑자기 튄 값(센서 오류일 가능성이 큰 값)을 걸러 내거나 표시해 두면, 분석 단계의 판단이 더 정확해집니다." },
+      quiz: [
+        { q: "측정된 CO₂ 값 1,180 ppm이 기준값 1,000 ppm보다 높다고 판단하여 \"환기가 필요하다\"는 정보를 만들어 내는 단계는?", o: OPT4, a: 3, e: "정리된 값을 기준과 비교하여 의미 있는 판단으로 바꾸는 일은 A(데이터 분석) 단계입니다." },
+        { q: "집 안의 Wi-Fi 공유기가 측정기의 값을 서버로 보내 주는 것은 어느 단계에 해당하나요?", o: OPT4, a: 1, e: "센서 정보를 네트워크를 통해 전송하는 일은 N(데이터 전달) 단계입니다." },
+        { q: "서버가 측정값 중 갑자기 튄 이상한 값을 걸러 내고 단위를 ppm으로 맞추어 측정 시각과 함께 저장하는 것은 어느 단계에 해당하나요?", o: OPT4, a: 2, e: "판단을 내리기 전에 받은 값을 쓸 수 있게 정리하고 저장하는 일은 P(데이터 처리) 단계입니다. 정리된 값을 기준과 비교해 의미를 찾는 일은 그다음인 A(데이터 분석) 단계입니다." }
+      ]
+    },
+    {
+      id: 'farm', tab: '스마트 팜', name: '스마트 팜 온실', tag: '산업 · 농업',
+      summary: '온실 안 온도·습도·토양 수분 센서에서 수집한 데이터를 전송한다. 전송받은 값이 작물에 알맞은 범위를 벗어나면 재배 환경에 문제가 생겼다고 판단하여 스마트 기기에 조치 시기를 알려 주는 서비스를 제공한다.',
+      facts: [['대표 센서', '온도·습도·CO₂·토양 수분'], ['주요 통신', 'LoRa, LTE 등 장거리 무선']],
+      D: { thing: '온실 센서 노드', body: '온실 곳곳에 설치된 센서가 온도, 습도, 토양 수분을 측정합니다. 사람이 온실을 돌며 온도계를 들여다보던 일을 센서가 24시간 대신합니다.', sample: '온실 3동 · 32.5 °C · 습도 88 % · 토양 수분 41 %' },
+      N: { thing: '게이트웨이 · 무선 통신', body: '온실은 집보다 넓고 전기 공급이 어려운 곳이 많아서 적은 전력으로 멀리 보내는 무선 통신(예: LoRa)이나 이동통신망을 사용합니다. 센서 값이 게이트웨이를 거쳐 인터넷으로 나갑니다.', sample: '센서 노드 → 게이트웨이 → 인터넷 → 서버' },
+      P: { thing: "데이터 처리 서버", job: "센서 12개 값 모으기 · 빠진 값 정리", body: "온실 3동에 있는 센서 12개의 값을 한곳에 모으고, 통신 오류로 빠지거나 두 번 들어온 값을 정리합니다. 센서마다 다른 형식도 하나로 맞추어 저장합니다.", sample: "3동 센서 12개 수집 · 중복 1개 삭제 · 평균 32.5 °C 저장" },
+      A: { thing: "농업 분석 플랫폼", job: "적정 범위와 비교 → 고온 경보", body: "정리된 값을 작물별 적정 범위와 비교하고 지난 며칠의 변화와도 견주어 \"고온 경보\", \"건조 경보\" 같은 판단을 만들어 냅니다. 재배 데이터가 쌓일수록 기준을 더 정교하게 다듬을 수 있습니다.", sample: "평균 32.5 > 적정 상한 28 → 고온 경보" },
+      C: { thing: '스마트폰 · 관제 화면', body: '농장주의 스마트폰에 "3동 온도 32.5 °C — 환기가 필요합니다" 알림과 온도 변화 그래프가 나타납니다.', sample: '알림: 3동 고온 경보 (32.5 °C)' },
+      pros: ['밤낮없이 재배 환경을 감시하여 사람의 노동 부담을 줄인다.', '작물이 힘들어하기 전에 문제를 알 수 있어 수확량과 품질을 지키기 쉽다.', '재배 데이터가 쌓여 경험이 적은 농부도 기준을 배울 수 있다.'],
+      limits: ['센서와 설비를 설치하는 초기 비용이 든다.', '습기와 흙먼지 때문에 센서가 고장 나거나 오차가 생기기 쉽다.', '통신이 닿지 않는 곳에서는 데이터가 끊긴다.'],
+      future: ['쌓인 재배 데이터를 인공지능이 분석하여 최적의 온도·물·양분 조건을 추천한다.', '사람의 확인 없이 스스로 환기하고 물을 주는 완전 자동 제어가 늘어난다.'],
+      think: { q: "온실 3동의 센서 12개 중 1개가 고장 나서 계속 0 °C를 보내고 있습니다. 평균 온도가 왜곡되지 않으려면 처리 단계와 분석 단계에서 각각 어떻게 대응해야 할까요?", a: "처리 단계에서 다른 센서들과 크게 다른 값을 오류로 표시하고 평균 계산에서 제외합니다. 분석 단계에서는 \"이 센서는 계속 이상한 값을 보낸다\"는 패턴을 찾아 관리자에게 센서 점검이 필요하다고 알릴 수 있습니다." },
+      quiz: [
+        { q: "서버가 \"작물의 적정 온도 범위를 벗어났는가\"를 판단하여 고온 경보를 만드는 단계는?", o: OPT4, a: 3, e: "정리된 값을 기준과 비교하여 의미 있는 판단으로 바꾸는 일은 A(데이터 분석) 단계입니다." },
+        { q: "통신이 닿지 않는 구역에 있는 온실 센서의 값이 서버까지 도착하지 못한다면, 가장 먼저 문제가 생기는 단계는?", o: OPT4, a: 1, e: "센서는 값을 측정했지만 전달 과정이 끊긴 것이므로 N(데이터 전달) 단계에서 문제가 생깁니다. 그 뒤의 P·A·C도 멈추게 됩니다." },
+        { q: "온실 3동에 있는 센서 12개의 값을 한곳에 모으고, 통신 오류로 두 번 들어온 값을 정리하는 단계는?", o: OPT4, a: 2, e: "판단을 내리기 전에 받은 값을 쓸 수 있게 정리하고 저장하는 일은 P(데이터 처리) 단계입니다. 정리된 값을 기준과 비교해 의미를 찾는 일은 그다음인 A(데이터 분석) 단계입니다." }
+      ]
+    },
+    {
+      id: 'health', tab: '스마트 헬스케어', name: '스마트 워치 심박 관리', tag: '건강 · 웨어러블',
+      summary: '스마트 워치의 심박 센서에서 수집한 데이터를 스마트폰으로 전송한다. 전송받은 심박수가 평소 범위를 크게 벗어나면 몸 상태에 주의가 필요하다고 판단하여 사용자에게 알려 주는 서비스를 제공한다.',
+      facts: [['대표 센서', '광혈류(PPG) 심박 센서'], ['주요 통신', '블루투스 → 이동통신망·Wi-Fi']],
+      D: { thing: '스마트 워치', body: '손목 안쪽의 초록빛 LED가 피부를 비추고, 혈관을 지나는 혈액에 흡수되고 남은 빛의 변화를 센서가 읽어 심박수로 계산합니다. 우리 몸이 내는 신호가 데이터가 되는 지점입니다.', sample: '심박 138 bpm · 움직임 없음 · 착용 상태 양호' },
+      N: { thing: '블루투스 · 이동통신망', body: '워치의 값이 먼저 블루투스로 스마트폰에 전달되고, 스마트폰이 이동통신망이나 Wi-Fi로 서버에 올립니다. 짧은 거리와 먼 거리 통신이 이어서 쓰이는 사례입니다.', sample: '워치 →(블루투스)→ 스마트폰 →(LTE)→ 서버' },
+      P: { thing: "건강 관리 서버", job: "심박·움직임 짝짓기 · 잘못된 값 제외", body: "스마트폰이 올려 보낸 심박수를 시간 순서로 정리하고, 착용이 헐거워 생긴 잘못된 값(예: 0 bpm)을 걸러 냅니다. 같은 시각의 움직임 데이터도 짝지어 저장합니다.", sample: "14:32 · 심박 138 · 움직임 0 · 오류값 제외 · 저장" },
+      A: { thing: "건강 분석 프로그램", job: "움직임과 함께 분석 → 주의", body: "심박수만 보지 않고 움직임 데이터와 함께 분석합니다. 가만히 있는데 심박수가 높은 것과 달리기 중에 높은 것은 전혀 다른 의미이기 때문입니다. 평소 나의 범위와도 비교합니다.", sample: "움직임 없음 + 138 bpm > 기준 120 → 주의" },
+      C: { thing: '워치 · 스마트폰 화면', body: '"안정 시 심박수가 높게 측정되었어요. 몸 상태를 확인해 주세요."라는 알림이 화면에 나타나고, 설정에 따라 보호자에게도 전달됩니다.', sample: '알림: 안정 시 심박수 138 bpm — 몸 상태를 확인해 주세요' },
+      pros: ['평소 몸 상태가 기록되어 나의 변화를 스스로 확인할 수 있다.', '이상 징후를 일찍 알아차리고 병원 방문 시기를 고민하는 데 도움이 된다.', '혼자 사는 노약자의 상태를 보호자가 함께 살필 수 있다.'],
+      limits: ['대부분 참고용 정보이며 의사의 진단을 대신할 수 없다.', '착용 상태나 움직임에 따라 측정 오차가 생길 수 있다.', '건강 정보는 민감한 개인정보이므로 유출되면 피해가 크다.'],
+      future: ['병원 진료 기록과 연결하여 원격 진료와 맞춤형 건강 관리로 발전한다.', '혈압, 혈중 산소, 수면 등 더 다양한 센서 데이터를 함께 분석한다.'],
+      think: { q: '건강 데이터는 다른 사물 인터넷 데이터보다 왜 더 조심해서 다루어야 할까요? 수집·전송·저장 단계에서 필요한 보호 방법도 하나씩 생각해 보세요.', a: '건강 정보는 개인의 가장 민감한 정보라서 유출되면 차별이나 악용의 우려가 큽니다. 수집할 때는 사용자의 동의를 받고 꼭 필요한 정보만 모으며, 전송할 때는 암호화하고, 저장할 때는 접근 권한을 제한하는 방법이 있습니다.' },
+      quiz: [
+        { q: "스마트 워치가 피부에 빛을 비추어 심박수를 측정하는 것은 어느 단계에 해당하나요?", o: OPT4, a: 0, e: "사물이 물리량을 측정하여 데이터로 바꾸는 일은 D(데이터 수집) 단계입니다." },
+        { q: "달리기 중에는 심박수가 높아도 경보를 울리지 않도록 움직임 데이터를 함께 살펴 판단하는 것은 어느 단계인가요?", o: OPT4, a: 3, e: "여러 데이터를 종합하여 의미 있는 판단을 만드는 일은 A(데이터 분석) 단계입니다." },
+        { q: "같은 시각의 심박수와 움직임 데이터를 짝지어 저장하고, 착용이 헐거워 생긴 잘못된 값(0 bpm)을 걸러 내는 단계는?", o: OPT4, a: 2, e: "판단을 내리기 전에 받은 값을 쓸 수 있게 정리하고 저장하는 일은 P(데이터 처리) 단계입니다. 정리된 값을 기준과 비교해 의미를 찾는 일은 그다음인 A(데이터 분석) 단계입니다." }
+      ]
+    },
+    {
+      id: 'traffic', tab: '스마트 교통', name: '버스 도착 정보 시스템', tag: '공공 · 교통',
+      summary: '버스에 설치된 위치 단말기에서 수집한 위치 데이터를 서버로 전송한다. 서버는 전송받은 위치와 속도를 바탕으로 정류장별 도착 시간을 계산하여 정류장 안내기와 스마트 기기에 버스 도착 정보를 제공한다.',
+      facts: [['대표 센서', 'GPS 위치 단말기'], ['주요 통신', '이동통신망(LTE·5G)']],
+      D: { thing: '버스 위치 단말기', body: '버스에 달린 GPS 단말기가 인공위성 신호로 버스의 위치와 속도를 계산합니다. 수십 대의 버스가 각자 달리면서 자신의 위치를 데이터로 만들어 냅니다.', sample: '버스 7001 · GPS 위치 · 속도 24 km/h · 30초 간격' },
+      N: { thing: '이동통신망', body: '달리는 버스는 Wi-Fi가 닿지 않으므로 이동통신망을 이용해 몇십 초마다 위치를 서버로 보냅니다. 움직이는 사물이기 때문에 무선 통신이 필수입니다.', sample: '버스 →(LTE)→ 버스정보센터 서버' },
+      P: { thing: "버스정보센터 서버", job: "GPS 좌표를 노선·정류장 구간으로 변환", body: "여러 대의 버스에서 온 위치 데이터를 버스별로 정리하고, 잠깐 튄 위치값을 걸러 낸 뒤 노선과 정류장 정보에 맞추어 저장합니다. 지도 위의 좌표가 노선 위의 위치로 바뀝니다.", sample: "7001 · GPS 좌표 → \"7001번, 11~12번째 정류장 사이\" 저장" },
+      A: { thing: "도착 예측 프로그램", job: "거리·속도로 도착 시간 예측", body: "정류장까지 남은 거리와 평균 속도, 교통 상황을 이용해 도착까지 걸리는 시간을 예측합니다. 위치라는 데이터가 \"몇 분 뒤 도착\"이라는 정보로 바뀝니다.", sample: "남은 거리 1.8 km ÷ 평균 22 km/h ≈ 5분" },
+      C: { thing: '정류장 안내기 · 앱', body: '정류장 안내기와 스마트폰 앱에 "7001번 5분 후 도착"이 표시됩니다. 승객은 이 정보를 보고 기다릴지, 다른 교통수단을 탈지 결정합니다.', sample: '표시: 7001번 · 5분 후 도착 · 2정거장 전' },
+      pros: ['버스가 언제 올지 알 수 있어 기다리는 시간을 효율적으로 쓸 수 있다.', '교통 약자도 버스가 오는 시간을 미리 알고 이동 계획을 세울 수 있다.', '운행 데이터를 분석하여 배차 간격과 노선을 개선하는 데 활용한다.'],
+      limits: ['교통 정체나 사고처럼 갑자기 바뀌는 상황은 예측에 반영하기 어렵다.', '터널이나 높은 건물 사이에서는 GPS 신호가 약해질 수 있다.', '위치 정보가 쌓이면 이동 경로가 노출될 수 있어 관리가 필요하다.'],
+      future: ['신호등과 연결되어 버스가 다가오면 초록불을 길게 유지하는 우선 신호 방식이 확대된다.', '승객의 호출에 따라 노선이 바뀌는 수요응답형 교통과 자율주행 버스로 발전한다.'],
+      think: { q: '앱에 표시된 도착 시간이 가끔 실제와 달라요. D, N, A 세 단계 중 어디에서 오차가 생길 수 있을지 하나씩 예를 들어 보세요.', a: 'D: 터널에서 GPS 신호가 약해 위치가 부정확할 수 있습니다. N: 통신이 늦어져 몇십 초 전 위치가 도착하는 경우가 있습니다. A: 평균 속도로 계산하기 때문에 갑작스러운 정체나 신호 대기를 반영하지 못할 수 있습니다.' },
+      quiz: [
+        { q: "정류장 안내기 화면에 \"7001번 5분 후 도착\"이 표시되는 것은 어느 단계인가요?", o: OPT4, a: 4, e: "처리·분석된 정보를 사람이 보는 화면에 보여 주는 일은 C(서비스 제공) 단계입니다." },
+        { q: "버스가 터널 안에 들어가 GPS 신호를 받지 못해 위치 데이터가 부정확해졌다면, 가장 먼저 문제가 생기는 단계는?", o: OPT4, a: 0, e: "위치를 측정하는 일 자체가 어려워진 것이므로 D(데이터 수집) 단계에서 문제가 생깁니다. 이후의 모든 단계가 부정확한 데이터를 받게 됩니다." },
+        { q: "버스의 GPS 좌표를 \"7001번 노선의 11~12번째 정류장 사이\"처럼 노선 정보에 맞추어 바꾸어 저장하는 단계는?", o: OPT4, a: 2, e: "판단을 내리기 전에 받은 값을 쓸 수 있게 정리하고 저장하는 일은 P(데이터 처리) 단계입니다. 정리된 값을 기준과 비교해 의미를 찾는 일은 그다음인 A(데이터 분석) 단계입니다." }
+      ]
+    },
+    {
+      id: 'city', tab: '스마트 시티', name: '스마트 쓰레기통', tag: '도시 · 환경',
+      summary: '쓰레기통 안의 초음파 센서에서 수집한 데이터를 서버로 전송한다. 여러 쓰레기통의 적재율을 모아 기준 이상이면 수거가 필요하다고 판단하여 관리자와 수거 차량 단말에 수거 시기와 순서를 알려 주는 서비스를 제공한다.',
+      facts: [['대표 센서', '초음파 거리 센서'], ['주요 통신', 'LoRa, NB-IoT 등 저전력 통신']],
+      D: { thing: '쓰레기통 센서', body: '뚜껑 아래에서 초음파를 쏘아 쓰레기에 부딪쳐 돌아오는 시간으로 쓰레기까지의 거리를 계산합니다. 통을 열어 보지 않아도 안의 상태를 알 수 있게 됩니다.', sample: '뚜껑~쓰레기 거리 5 cm (통 깊이 60 cm)' },
+      N: { thing: '저전력 무선 통신', body: '거리 곳곳의 쓰레기통은 전선이 없고 배터리나 태양광으로 움직이므로 적은 전력으로 데이터를 보내는 통신을 사용합니다. 하루에 몇 번만 짧게 전송하여 전력을 아낍니다.', sample: '쓰레기통 → 기지국 → 인터넷 → 서버 (하루 4회)' },
+      P: { thing: "도시 관제 서버", job: "거리값을 적재율(%)로 변환 · 통 번호와 저장", body: "통마다 전송된 거리값을 적재율(%)로 바꾸고, 뚜껑을 열 때 잠깐 튄 값을 제외한 뒤 통 번호·위치와 함께 저장합니다. 수백 개 통의 값이 같은 형식으로 정리됩니다.", sample: "B-04 · 5 cm → 92 % | A-12 · 12 cm → 80 % | A-13 · 39 cm → 35 %" },
+      A: { thing: "수거 분석 프로그램", job: "적재율 비교 → 수거 순서·경로", body: "정리된 적재율을 비교하여 기준(예: 80 % 이상)을 넘은 통을 고르고, 어느 통을 먼저 비울지 순서를 정합니다. 수거 차량이 가장 효율적으로 돌 수 있는 경로도 계산합니다.", sample: "B-04 92 %, A-12 80 %, A-13 35 % → 수거 순서: B-04 → A-12" },
+      C: { thing: '관제 화면 · 차량 단말', body: '관리자의 관제 화면에 가득 찬 통이 지도 위에 표시되고, 수거 차량 단말에는 오늘 들를 통과 순서가 나타납니다.', sample: '지도 표시: B-04 (92 %) 수거 필요' },
+      pros: ['가득 차지 않은 통을 방문하는 낭비가 줄어 연료비와 인건비를 아낄 수 있다.', '쓰레기가 넘치기 전에 수거하여 악취와 도시 미관 문제를 줄인다.', '통 사용량 데이터를 근거로 설치 위치를 조정할 수 있다.'],
+      limits: ['센서가 오염되거나 쓰레기 표면이 불규칙하면 측정 오차가 생긴다.', '배터리 교체와 설치 비용이 들고, 통의 수가 많아질수록 관리가 복잡해진다.', '실제 수거 작업과 공사·행사 같은 예외 상황은 여전히 사람의 판단이 필요하다.'],
+      future: ['카메라와 인공지능이 쓰레기 종류를 구분하여 재활용률을 높인다.', '수거 경로가 자동으로 만들어지고 자율주행 차량이 수거하는 방식으로 발전한다.'],
+      think: { q: "수거 순서를 정하는 일(분석)을 프로그램이 대신하면 어떤 점이 좋아질까요? 그리고 프로그램이 정한 순서를 그대로 따르면 곤란한 상황은 언제일지 생각해 보세요.", a: "프로그램은 수백 개 통의 적재율을 빠르게 비교하고 가장 효율적인 경로를 계산하는 데 강합니다. 하지만 행사나 공사로 길이 막힌 것 같은 예외는 데이터에 없을 수 있어서, 그런 경우에는 사람이 결과를 확인하고 조정해야 합니다." },
+      quiz: [
+        { q: "초음파를 쏘아 쓰레기까지의 거리를 재는 것은 어느 단계인가요?", o: OPT4, a: 0, e: "센서로 물리량을 측정하는 일은 D(데이터 수집) 단계입니다." },
+        { q: "수백 개 쓰레기통의 적재율을 비교하여 수거 우선순위를 정하고 수거 경로를 계산하는 단계는?", o: OPT4, a: 3, e: "정리된 데이터를 비교하여 의미 있는 판단(수거 순서)을 만드는 일은 A(데이터 분석) 단계입니다." },
+        { q: "서버가 통에서 온 거리값 5 cm를 적재율 92 %로 바꾸어 통 번호와 함께 저장하는 단계는?", o: OPT4, a: 2, e: "판단을 내리기 전에 받은 값을 쓸 수 있게 정리하고 저장하는 일은 P(데이터 처리) 단계입니다. 정리된 값을 기준과 비교해 의미를 찾는 일은 그다음인 A(데이터 분석) 단계입니다." }
+      ]
+    }
+  ];
+
+  var tabsEl = document.getElementById('tabs');
+  var panelsEl = document.getElementById('panels');
+  var timers = [];
+
+  function el(tag, cls, html) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (html != null) n.innerHTML = html;
+    return n;
+  }
+
+  function stepHTML(s, data) {
+    return '<div class="step ' + s.cls + '" data-stage="' + s.k + '">' +
+      '<div class="top"><span class="badge">' + s.k + '</span><div><h4>' + s.name + '</h4><div class="thing">' + data.thing + '</div></div></div>' +
+      '<p class="body">' + data.body + '</p>' +
+      '<div class="sample mono"><small>이 단계의 데이터 예시</small>' + data.sample + '</div></div>';
+  }
+
+  function buildCase(c, idx) {
+    var p = el('section', 'panel');
+    p.id = 'panel-' + c.id;
+    p.setAttribute('role', 'tabpanel');
+    p.setAttribute('aria-labelledby', 'tab-' + c.id);
+    var facts = c.facts.map(function (f) { return '<div class="fact"><dt>' + f[0] + '</dt><dd>' + f[1] + '</dd></div>'; }).join('');
+    var steps = STAGES.map(function (s) { return stepHTML(s, c[s.k]); }).join('');
+    var li = function (a) { return a.map(function (t) { return '<li>' + t + '</li>'; }).join(''); };
+
+    p.innerHTML =
+      '<div class="card">' +
+        '<div class="case-head"><h2>' + c.name + '</h2><span class="tag">' + c.tag + '</span></div>' +
+        '<p class="summary">' + c.summary + '</p>' +
+        '<dl class="facts" style="margin-bottom:0">' + facts + '</dl>' +
+      '</div>' +
+      '<div class="card">' +
+        '<div class="sec-row"><div><h3 class="sec-title">동작 원리, 한눈에 보기</h3><p class="sec-sub">센서에서 출발한 데이터가 D → N → P → A → C 순서로 흘러 사람에게 전달됩니다.</p></div>' +
+        '<button type="button" class="btn play">▶ 데이터 흐름 따라가기</button></div>' +
+        '<div class="steps">' + steps + '</div>' +
+      '</div>' +
+      '<div class="card">' +
+        '<h3 class="sec-title">장점 · 유의할 점 · 앞으로의 모습</h3>' +
+        '<div class="trio">' +
+          '<div class="col pro"><h4>장점</h4><ul>' + li(c.pros) + '</ul></div>' +
+          '<div class="col lim"><h4>한계와 유의할 점</h4><ul>' + li(c.limits) + '</ul></div>' +
+          '<div class="col fut"><h4>미래 전망</h4><ul>' + li(c.future) + '</ul></div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="card think">' +
+        '<h3 class="sec-title">생각해 볼 질문</h3>' +
+        '<p class="q">' + c.think.q + '</p>' +
+        '<details><summary>내 생각을 정리한 뒤 예시 답 보기</summary><p class="ans">' + c.think.a + '</p></details>' +
+      '</div>' +
+      '<div class="card">' +
+        '<h3 class="sec-title">확인 퀴즈</h3>' +
+        '<div class="quiz-list"></div>' +
+        '<p class="score" aria-live="polite">0 / ' + c.quiz.length + ' 정답</p>' +
+      '</div>';
+
+    // quiz
+    var qlist = p.querySelector('.quiz-list');
+    var scoreEl = p.querySelector('.score');
+    var correct = 0, answered = 0;
+    c.quiz.forEach(function (q, qi) {
+      var box = el('div', 'quiz-q');
+      box.appendChild(el('p', 'qn', '<span>Q' + (qi + 1) + '</span>' + q.q));
+      var opts = el('div', 'opts');
+      var fb = el('div', 'fb');
+      fb.hidden = true;
+      q.o.forEach(function (label, oi) {
+        var b = el('button', 'opt', label);
+        b.type = 'button';
+        b.addEventListener('click', function () {
+          var all = opts.querySelectorAll('.opt');
+          all.forEach(function (x, xi) {
+            x.disabled = true;
+            if (xi === q.a) x.classList.add('correct');
+            else if (xi === oi) x.classList.add('wrong');
+            else x.classList.add('dim');
+          });
+          var ok = oi === q.a;
+          answered++; if (ok) correct++;
+          fb.className = 'fb ' + (ok ? 'ok' : 'no');
+          fb.innerHTML = '<b>' + (ok ? '정답입니다.' : '아쉬워요.') + '</b>' + q.e;
+          fb.hidden = false;
+          scoreEl.textContent = correct + ' / ' + c.quiz.length + ' 정답' + (answered === c.quiz.length ? ' — 모두 풀었어요!' : '');
+        });
+        opts.appendChild(b);
+      });
+      box.appendChild(opts); box.appendChild(fb);
+      qlist.appendChild(box);
+    });
+
+    // play flow
+    p.querySelector('.play').addEventListener('click', function () { playFlow(p); });
+    return p;
+  }
+
+  function playFlow(p) {
+    timers.forEach(clearTimeout); timers = [];
+    var nodes = Array.prototype.slice.call(p.querySelectorAll('.step'));
+    nodes.forEach(function (n) { n.classList.remove('on'); });
+    nodes.forEach(function (n, i) {
+      timers.push(setTimeout(function () {
+        nodes.forEach(function (m) { m.classList.remove('on'); });
+        n.classList.add('on');
+        if (window.matchMedia && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          n.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        }
+      }, i * 1400));
+    });
+    timers.push(setTimeout(function () { nodes.forEach(function (m) { m.classList.remove('on'); }); }, nodes.length * 1400));
+  }
+
+  function buildCompare() {
+    var p = el('section', 'panel');
+    p.id = 'panel-compare';
+    p.setAttribute('role', 'tabpanel');
+    p.setAttribute('aria-labelledby', 'tab-compare');
+    var rows = CASES.map(function (c) {
+      return '<tr><th scope="row">' + c.tab + '</th>' +
+        '<td>' + c.D.thing + '<br><span class="mono" style="font-size:12px;color:var(--muted)">' + c.facts[0][1] + '</span></td>' +
+        '<td>' + c.N.thing + '</td>' +
+        '<td>' + c.P.thing + '<br><span style="font-size:13px;color:var(--muted)">' + c.P.job + '</span></td>' +
+        '<td>' + c.A.thing + '<br><span style="font-size:13px;color:var(--muted)">' + c.A.job + '</span></td>' +
+        '<td>' + c.C.thing + '</td></tr>';
+    }).join('');
+    p.innerHTML =
+      '<div class="card">' +
+        '<h2 class="sec-title" style="font-size:24px">다섯 사례를 한눈에 비교하기</h2>' +
+        '<p class="sec-sub">스마트 화분과 마찬가지로 모든 사례가 같은 흐름을 따르지만, 각 단계에 쓰이는 사물과 기술은 다릅니다.</p>' +
+        '<div class="tbl-wrap"><table><thead><tr><th>사례</th>' +
+          '<th><span class="l" style="background:var(--d)">D</span>수집</th>' +
+          '<th><span class="l" style="background:var(--n)">N</span>전달</th>' +
+          '<th><span class="l" style="background:var(--p)">P</span>처리</th>' +
+          '<th><span class="l" style="background:var(--a)">A</span>분석</th>' +
+          '<th><span class="l" style="background:var(--c)">C</span>서비스</th></tr></thead>' +
+        '<tbody>' + rows + '</tbody></table></div>' +
+        '<div class="insight">' +
+          '<div><b>같은 점</b>센서로 수집하고, 네트워크로 보내고, 서버에서 정리(처리)한 뒤 의미를 찾아(분석) 스마트 기기로 알리는 같은 흐름입니다.</div>' +
+          '<div><b>다른 점 ① 통신</b>집 안은 Wi-Fi, 넓은 농장과 거리의 통은 저전력 장거리 통신, 움직이는 버스는 이동통신망을 씁니다. 사물이 놓인 환경이 통신 방식을 정합니다.</div>' +
+          '<div><b>다른 점 ② 처리와 분석</b>처리는 튄 값 거르기, 단위 바꾸기, 좌표를 노선에 맞추기처럼 데이터를 다듬는 일이고, 분석은 기준값 비교(CO₂), 여러 데이터 함께 보기(심박수+움직임), 많은 통을 비교해 순서 정하기(쓰레기통)처럼 의미를 찾는 일입니다.</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="card">' +
+        '<h3 class="sec-title">직접 설계해 보기</h3>' +
+        '<p class="sec-sub">우리 학교나 우리 집에서 불편한 점 하나를 골라 사물 인터넷 서비스를 설계해 봅시다.</p>' +
+        '<div class="design-box"><b>설계 틀</b><ol>' +
+          '<li><b>D</b> 무엇을 어떤 센서로 측정할까요?</li>' +
+          '<li><b>N</b> 어떤 네트워크로 보낼까요? (거리, 전력, 이동 여부를 고려)</li>' +
+          '<li><b>P</b> 받은 데이터를 어떻게 다듬어 저장할까요? (오류값 제거, 단위 통일 등)</li>' +
+          '<li><b>A</b> 어떤 기준으로 판단할까요? (기준값 하나? 여러 데이터? 과거 기록?)</li>' +
+          '<li><b>C</b> 누구에게, 어떤 기기로 알릴까요?</li>' +
+        '</ol></div>' +
+        '<p class="sec-sub" style="margin-top:14px">예) 교실 사물함 문 열림 감지, 급식실 대기 인원 안내, 운동장 자외선 지수 알림, 도서관 좌석 사용 현황</p>' +
+      '</div>';
+    return p;
+  }
+
+  var order = CASES.map(function (c) { return { id: c.id, label: c.tab }; });
+  order.push({ id: 'compare', label: '한눈에 비교' });
+
+  order.forEach(function (o, i) {
+    var t = el('button', 'tab');
+    t.type = 'button'; t.id = 'tab-' + o.id;
+    t.setAttribute('role', 'tab');
+    t.setAttribute('aria-controls', 'panel-' + o.id);
+    t.innerHTML = (i < CASES.length ? '<span class="no">' + (i + 1) + '</span>' : '') + o.label;
+    t.addEventListener('click', function () { select(o.id, true); });
+    t.addEventListener('keydown', function (e) {
+      var k = e.key, j = -1;
+      if (k === 'ArrowRight') j = (i + 1) % order.length;
+      else if (k === 'ArrowLeft') j = (i - 1 + order.length) % order.length;
+      if (j >= 0) { e.preventDefault(); select(order[j].id, true); document.getElementById('tab-' + order[j].id).focus(); }
+    });
+    tabsEl.appendChild(t);
+  });
+
+  CASES.forEach(function (c, i) { panelsEl.appendChild(buildCase(c, i)); });
+  panelsEl.appendChild(buildCompare());
+
+  function select(id, scroll) {
+    timers.forEach(clearTimeout); timers = [];
+    order.forEach(function (o) {
+      var t = document.getElementById('tab-' + o.id);
+      var p = document.getElementById('panel-' + o.id);
+      var on = o.id === id;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      p.hidden = !on;
+      p.querySelectorAll('.on').forEach(function (n) { n.classList.remove('on'); });
+      if (on && scroll) t.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+    });
+    if (scroll) {
+      var bar = document.querySelector('.tabs-bar');
+      var top = bar.getBoundingClientRect().top + window.scrollY;
+      if (window.scrollY > top) window.scrollTo({ top: top, behavior: 'smooth' });
+    }
+  }
+  select(order[0].id, false);
+})();
+</script>
+</body>
+</html>
