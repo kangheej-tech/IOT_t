@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>사물 인터넷 설계하기 &mdash; 실내외 온도계 만들기</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js" crossorigin="anonymous"></script>
+<style>
+    html { scroll-behavior: smooth; }
+    body {
+        font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto,
+        "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic",
+        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+        background-color: #f8fafc;
+    }
+    body code, body pre, body .font-mono {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono",
+        "Courier New", monospace;
+    }
+    .hero-gradient { background: linear-gradient(135deg, #0891b2 0%, #0f766e 100%); }
+    .sticky-nav {
+        position: sticky; top: 0; z-index: 100;
+        backdrop-filter: blur(12px);
+        background-color: rgba(255, 255, 255, 0.9);
+        border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+    .section-card {
+        background: white;
+        padding: clamp(1.25rem, 4vw, 2.5rem);
+        border-radius: 2rem;
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+        border: 1px solid #f1f5f9;
+    }
+    .quiz-btn {
+        width: 100%; padding: 1.25rem; text-align: left; border-radius: 1rem;
+        border: 2px solid #e2e8f0; background-color: #f8fafc; font-weight: 500;
+        color: #374151; font-size: 1rem; transition: all 0.25s ease; cursor: pointer;
+    }
+    .quiz-btn:hover { background: #f0fdfa; border-color: #5eead4; }
+    .quiz-btn.correct { background: #0d9488; color: white; border-color: #0d9488; }
+    .quiz-btn.wrong { background: #f43f5e; color: white; border-color: #f43f5e; }
+    .quiz-btn.disabled { opacity: 0.5; pointer-events: none; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #e2e8f0; padding: 0.75rem 1rem; text-align: left; font-size: 1rem; }
+    thead th { background-color: #f1f5f9; font-weight: 700; color: #334155; }
+    tbody tr:nth-child(even) { background-color: #f8fafc; }
+    tbody tr:hover { background-color: #f0fdfa; }
+    table.table-prose { min-width: 32rem; }
+    .code-block {
+        background: #0f172a; color: #e2e8f0; border-radius: 1rem; padding: 1.25rem 1.5rem;
+        overflow-x: auto; font-size: 0.9rem; line-height: 1.7;
+    }
+    .code-block .c { color: #64748b; } /* comment */
+    .flow-chip {
+        display: flex; align-items: center; gap: 0.5rem;
+        background: #f0fdfa; border: 1px solid #99f6e4; color: #0f766e;
+        border-radius: 999px; padding: 0.5rem 1rem; font-weight: 700; font-size: 0.95rem;
+        white-space: nowrap;
+    }
+    .block-shot { border: 1px solid #e2e8f0; border-radius: 1rem; background: white; padding: 0.75rem; }
+    .block-shot img { display: block; margin: 0 auto; max-width: 100%; height: auto; border-radius: 0.5rem; }
+</style>
+
+<style>
+    :root { color-scheme: light dark; }
+    body { background-color: #f8fafc; }
+
+    @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) { color-scheme: dark; }
+    }
+
+    /* Dark theme overrides — apply on system dark preference (unless explicitly
+       forced light) or when the page is explicitly switched to dark. */
+    @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) body { background-color: #0f172a !important; }
+        :root:not([data-theme="light"]) .bg-white { background-color: #1e293b !important; }
+        :root:not([data-theme="light"]) .section-card {
+            background: #1e293b !important;
+            border-color: #334155 !important;
+            box-shadow: none !important;
+        }
+        :root:not([data-theme="light"]) .sticky-nav {
+            background-color: rgba(15, 23, 42, 0.92) !important;
+            border-bottom-color: #334155 !important;
+        }
+        :root:not([data-theme="light"]) footer.bg-white { border-top-color: #334155 !important; }
+        :root:not([data-theme="light"]) .border-b.border-slate-200,
+        :root:not([data-theme="light"]) .border-t.border-slate-200,
+        :root:not([data-theme="light"]) hr.border-slate-200,
+        :root:not([data-theme="light"]) .border-slate-200 { border-color: #334155 !important; }
+
+        :root:not([data-theme="light"]) .text-slate-900 { color: #f1f5f9 !important; }
+        :root:not([data-theme="light"]) .text-slate-800 { color: #e2e8f0 !important; }
+        :root:not([data-theme="light"]) .text-slate-700 { color: #cbd5e1 !important; }
+        :root:not([data-theme="light"]) .text-slate-600 { color: #b6c2d1 !important; }
+        :root:not([data-theme="light"]) .text-slate-500 { color: #94a3b8 !important; }
+        :root:not([data-theme="light"]) .text-slate-400 { color: #94a3b8 !important; }
+
+        :root:not([data-theme="light"]) .bg-slate-100 { background-color: #1e293b !important; border-color: #334155 !important; }
+        :root:not([data-theme="light"]) .border-slate-300 { border-color: #475569 !important; }
+
+        /* Colored info boxes: keep hue, darken surface, lighten text */
+        :root:not([data-theme="light"]) .bg-teal-50 { background-color: rgba(20, 184, 166, 0.10) !important; }
+        :root:not([data-theme="light"]) .border-teal-200 { border-color: rgba(45, 212, 191, 0.35) !important; }
+        :root:not([data-theme="light"]) .text-teal-900 { color: #5eead4 !important; }
+
+        :root:not([data-theme="light"]) .bg-sky-50 { background-color: rgba(14, 165, 233, 0.10) !important; }
+        :root:not([data-theme="light"]) .border-sky-200 { border-color: rgba(56, 189, 248, 0.35) !important; }
+        :root:not([data-theme="light"]) .text-sky-900 { color: #7dd3fc !important; }
+
+        :root:not([data-theme="light"]) .bg-amber-50 { background-color: rgba(245, 158, 11, 0.10) !important; }
+        :root:not([data-theme="light"]) .border-amber-200 { border-color: rgba(251, 191, 36, 0.35) !important; }
+        :root:not([data-theme="light"]) .text-amber-900 { color: #fcd34d !important; }
+
+        :root:not([data-theme="light"]) .bg-violet-50 { background-color: rgba(139, 92, 246, 0.10) !important; }
+        :root:not([data-theme="light"]) .border-violet-200 { border-color: rgba(167, 139, 250, 0.35) !important; }
+        :root:not([data-theme="light"]) .text-violet-900 { color: #c4b5fd !important; }
+
+        :root:not([data-theme="light"]) .bg-emerald-50 { background-color: rgba(16, 185, 129, 0.10) !important; }
+        :root:not([data-theme="light"]) .border-emerald-200 { border-color: rgba(52, 211, 153, 0.35) !important; }
+        :root:not([data-theme="light"]) .text-emerald-900 { color: #6ee7b7 !important; }
+
+        :root:not([data-theme="light"]) .bg-rose-50 { background-color: rgba(244, 63, 94, 0.10) !important; }
+        :root:not([data-theme="light"]) .border-rose-200 { border-color: rgba(251, 113, 133, 0.35) !important; }
+        :root:not([data-theme="light"]) .text-rose-900 { color: #fda4af !important; }
+
+        /* Tables */
+        :root:not([data-theme="light"]) th, :root:not([data-theme="light"]) td { border-color: #334155 !important; }
+        :root:not([data-theme="light"]) thead th { background-color: #1e293b !important; color: #e2e8f0 !important; }
+        :root:not([data-theme="light"]) tbody tr:nth-child(even) { background-color: #16213a !important; }
+        :root:not([data-theme="light"]) tbody tr:hover { background-color: #0f2f2c !important; }
+
+        /* Quiz buttons */
+        :root:not([data-theme="light"]) .quiz-btn {
+            background-color: #1e293b !important;
+            border-color: #334155 !important;
+            color: #e2e8f0 !important;
+        }
+        :root:not([data-theme="light"]) .quiz-btn:hover {
+            background-color: #0f2f2c !important;
+            border-color: #2dd4bf !important;
+        }
+    }
+
+    /* Explicit dark theme (data-theme="dark") mirrors the same rules */
+    :root[data-theme="dark"] body { background-color: #0f172a !important; }
+    :root[data-theme="dark"] .bg-white { background-color: #1e293b !important; }
+    :root[data-theme="dark"] .section-card { background: #1e293b !important; border-color: #334155 !important; box-shadow: none !important; }
+    :root[data-theme="dark"] .sticky-nav { background-color: rgba(15, 23, 42, 0.92) !important; border-bottom-color: #334155 !important; }
+    :root[data-theme="dark"] footer.bg-white { border-top-color: #334155 !important; }
+    :root[data-theme="dark"] .border-b.border-slate-200,
+    :root[data-theme="dark"] .border-t.border-slate-200,
+    :root[data-theme="dark"] hr.border-slate-200,
+    :root[data-theme="dark"] .border-slate-200 { border-color: #334155 !important; }
+    :root[data-theme="dark"] .text-slate-900 { color: #f1f5f9 !important; }
+    :root[data-theme="dark"] .text-slate-800 { color: #e2e8f0 !important; }
+    :root[data-theme="dark"] .text-slate-700 { color: #cbd5e1 !important; }
+    :root[data-theme="dark"] .text-slate-600 { color: #b6c2d1 !important; }
+    :root[data-theme="dark"] .text-slate-500 { color: #94a3b8 !important; }
+    :root[data-theme="dark"] .text-slate-400 { color: #94a3b8 !important; }
+    :root[data-theme="dark"] .bg-slate-100 { background-color: #1e293b !important; border-color: #334155 !important; }
+    :root[data-theme="dark"] .border-slate-300 { border-color: #475569 !important; }
+    :root[data-theme="dark"] .bg-teal-50 { background-color: rgba(20, 184, 166, 0.10) !important; }
+    :root[data-theme="dark"] .border-teal-200 { border-color: rgba(45, 212, 191, 0.35) !important; }
+    :root[data-theme="dark"] .text-teal-900 { color: #5eead4 !important; }
+    :root[data-theme="dark"] .bg-sky-50 { background-color: rgba(14, 165, 233, 0.10) !important; }
+    :root[data-theme="dark"] .border-sky-200 { border-color: rgba(56, 189, 248, 0.35) !important; }
+    :root[data-theme="dark"] .text-sky-900 { color: #7dd3fc !important; }
+    :root[data-theme="dark"] .bg-amber-50 { background-color: rgba(245, 158, 11, 0.10) !important; }
+    :root[data-theme="dark"] .border-amber-200 { border-color: rgba(251, 191, 36, 0.35) !important; }
+    :root[data-theme="dark"] .text-amber-900 { color: #fcd34d !important; }
+    :root[data-theme="dark"] .bg-violet-50 { background-color: rgba(139, 92, 246, 0.10) !important; }
+    :root[data-theme="dark"] .border-violet-200 { border-color: rgba(167, 139, 250, 0.35) !important; }
+    :root[data-theme="dark"] .text-violet-900 { color: #c4b5fd !important; }
+    :root[data-theme="dark"] .bg-emerald-50 { background-color: rgba(16, 185, 129, 0.10) !important; }
+    :root[data-theme="dark"] .border-emerald-200 { border-color: rgba(52, 211, 153, 0.35) !important; }
+    :root[data-theme="dark"] .text-emerald-900 { color: #6ee7b7 !important; }
+    :root[data-theme="dark"] .bg-rose-50 { background-color: rgba(244, 63, 94, 0.10) !important; }
+    :root[data-theme="dark"] .border-rose-200 { border-color: rgba(251, 113, 133, 0.35) !important; }
+    :root[data-theme="dark"] .text-rose-900 { color: #fda4af !important; }
+    :root[data-theme="dark"] th, :root[data-theme="dark"] td { border-color: #334155 !important; }
+    :root[data-theme="dark"] thead th { background-color: #1e293b !important; color: #e2e8f0 !important; }
+    :root[data-theme="dark"] tbody tr:nth-child(even) { background-color: #16213a !important; }
+    :root[data-theme="dark"] tbody tr:hover { background-color: #0f2f2c !important; }
+    :root[data-theme="dark"] .quiz-btn { background-color: #1e293b !important; border-color: #334155 !important; color: #e2e8f0 !important; }
+    :root[data-theme="dark"] .quiz-btn:hover { background-color: #0f2f2c !important; border-color: #2dd4bf !important; }
+
+    /* Responsive: keep wide tables scrollable within their own container only */
+    .overflow-x-auto { max-width: 100%; }
+</style>
+
+</head>
+<body class="text-slate-900">
+
+<!-- ── Hero ── -->
+<header id="intro" class="hero-gradient text-white py-28 px-6 relative overflow-hidden">
+    <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+        <i class="fa-solid fa-thermometer-half absolute top-10 left-10 text-8xl transform -rotate-12"></i>
+        <i class="fa-solid fa-tower-broadcast absolute bottom-10 right-10 text-9xl"></i>
+    </div>
+    <div class="max-w-4xl mx-auto text-center relative z-10">
+        <span class="inline-block px-4 py-1.5 bg-white/20 rounded-full font-bold mb-6 backdrop-blur-sm border border-white/30 text-base">실습</span>
+        <h1 class="text-4xl md:text-6xl font-black mb-6 leading-tight break-keep">
+            사물 인터넷 설계하기
+        </h1>
+        <p class="text-lg md:text-xl opacity-90 font-medium max-w-2xl mx-auto leading-relaxed break-keep">
+            실외 마이크로비트가 잰 온도를, 실내 마이크로비트가 받아<br class="hidden md:block">
+            두 온도의 차이까지 알려주는 온도계를 함께 만들어 봅니다.
+        </p>
+        <p class="mt-6 text-sm font-bold text-white/70 tracking-wide">정보 개념정리 &middot; Ⅰ. 컴퓨팅 시스템 (교과서 30&ndash;34쪽) &middot; 미래엔</p>
+    </div>
+</header>
+
+<!-- ── 학습 목표 배너 ── -->
+<div class="bg-white border-b border-slate-200 px-6 py-6">
+    <div class="max-w-4xl mx-auto">
+        <div class="flex items-start gap-4">
+            <div class="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-bullseye text-teal-600 text-lg"></i>
+            </div>
+            <div>
+                <p class="font-black text-base text-slate-500 mb-2 uppercase tracking-widest">학습 목표</p>
+                <p class="text-base font-medium text-slate-800">
+                    문제 해결에 적합한 피지컬 컴퓨팅 시스템 장치를 선택하여 사물 인터넷 시스템을 설계할 수 있다.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ── 네비게이션 ── -->
+<nav class="sticky-nav px-6 py-4">
+    <div class="max-w-6xl mx-auto flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-teal-600 rounded-xl flex items-center justify-center text-white shadow-md">
+                <i class="fa-solid fa-thermometer-half text-base"></i>
+            </div>
+            <span class="font-black text-xl tracking-tight text-slate-800">사물 인터넷 설계하기</span>
+        </div>
+        <div class="hidden lg:flex flex-wrap justify-end gap-x-4 gap-y-1 font-bold text-slate-500 text-base">
+            <a href="#understand" class="hover:text-teal-600 transition">문제 이해</a>
+            <a href="#analyze" class="hover:text-teal-600 transition">문제 분석</a>
+            <a href="#algorithm" class="hover:text-teal-600 transition">알고리즘 설계</a>
+            <a href="#program" class="hover:text-teal-600 transition">프로그래밍</a>
+            <a href="#evaluate" class="hover:text-teal-600 transition">평가하기</a>
+            <a href="#quiz" class="hover:text-teal-600 transition">퀴즈</a>
+        </div>
+    </div>
+</nav>
+
+<!-- ── 메인 콘텐츠 ── -->
+<main class="max-w-6xl mx-auto px-4 sm:px-6 py-20 space-y-24">
+
+    <!-- ══════════ 학습 흐름도 ══════════ -->
+    <section class="space-y-6">
+        <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+            <span class="flow-chip"><i class="fa-solid fa-1"></i>문제 이해 및 준비하기</span>
+            <i class="fa-solid fa-chevron-right text-teal-400"></i>
+            <span class="flow-chip"><i class="fa-solid fa-2"></i>문제 분석하기</span>
+            <i class="fa-solid fa-chevron-right text-teal-400"></i>
+            <span class="flow-chip"><i class="fa-solid fa-3"></i>알고리즘 설계하기</span>
+            <i class="fa-solid fa-chevron-right text-teal-400"></i>
+            <span class="flow-chip"><i class="fa-solid fa-4"></i>프로그래밍하기</span>
+            <i class="fa-solid fa-chevron-right text-teal-400"></i>
+            <span class="flow-chip"><i class="fa-solid fa-5"></i>평가하기</span>
+        </div>
+    </section>
+
+    <!-- ══════════ 1. 문제 이해 및 준비하기 ══════════ -->
+    <section id="understand" class="scroll-mt-24 space-y-8">
+        <div class="text-center space-y-4">
+            <h2 class="text-3xl font-black text-slate-900">01 &middot; 문제 이해 및 준비하기</h2>
+            <div class="w-20 h-1.5 bg-teal-500 mx-auto rounded-full"></div>
+        </div>
+
+        <div class="section-card space-y-6">
+            <div class="bg-teal-50 border-2 border-teal-300 rounded-2xl p-6 space-y-2">
+                <p class="font-black text-lg text-teal-900">
+                    <i class="fa-solid fa-wind mr-2"></i>이번 시간에 해결할 문제
+                </p>
+                <p class="text-base text-slate-700 leading-relaxed">
+                    실외 온도와 실내 온도를 모두 보여 주고, 온도 차이가 5도 이하인지 확인할 수 있는 온도계를 만들어 보자.
+                </p>
+            </div>
+
+            <div>
+                <p class="font-black text-base text-slate-500 mb-3 uppercase tracking-widest">준비물</p>
+                <div class="flex flex-wrap gap-3">
+                    <span class="px-4 py-2 bg-slate-100 border border-slate-300 rounded-full text-base font-bold text-slate-700"><i class="fa-solid fa-microchip mr-2 text-teal-600"></i>실외 마이크로비트</span>
+                    <span class="px-4 py-2 bg-slate-100 border border-slate-300 rounded-full text-base font-bold text-slate-700"><i class="fa-solid fa-microchip mr-2 text-teal-600"></i>실내 마이크로비트</span>
+                    <span class="px-4 py-2 bg-slate-100 border border-slate-300 rounded-full text-base font-bold text-slate-700"><i class="fa-solid fa-display mr-2 text-teal-600"></i>컴퓨팅 시스템</span>
+                    <span class="px-4 py-2 bg-slate-100 border border-slate-300 rounded-full text-base font-bold text-slate-700"><i class="fa-solid fa-plug mr-2 text-teal-600"></i>USB 케이블</span>
+                    <span class="px-4 py-2 bg-slate-100 border border-slate-300 rounded-full text-base font-bold text-slate-700"><i class="fa-solid fa-battery-full mr-2 text-teal-600"></i>건전지</span>
+                    <span class="px-4 py-2 bg-slate-100 border border-slate-300 rounded-full text-base font-bold text-slate-700"><i class="fa-solid fa-box mr-2 text-teal-600"></i>건전지 케이스</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════ 2. 문제 분석하기 ══════════ -->
+    <section id="analyze" class="scroll-mt-24 space-y-8">
+        <div class="text-center space-y-4">
+            <h2 class="text-3xl font-black text-slate-900">02 &middot; 문제 분석하기</h2>
+            <div class="w-20 h-1.5 bg-teal-500 mx-auto rounded-full"></div>
+        </div>
+
+        <div class="section-card space-y-6">
+            <div class="overflow-x-auto">
+                <table class="table-prose">
+                    <thead>
+                    <tr>
+                        <th class="w-40">구분</th>
+                        <th>내용</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="font-bold">수집해야 할 데이터</td>
+                        <td>실내와 실외 온도 데이터</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold">처리 과정</td>
+                        <td>수집한 실내 온도와 실외 온도의 차이를 계산한다.</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold">처리 결과</td>
+                        <td>실내외 온도와, 적정한 온도 차인지 여부를 디스플레이에 보여 준다.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════ 3. 알고리즘 설계하기 ══════════ -->
+    <section id="algorithm" class="scroll-mt-24 space-y-8">
+        <div class="text-center space-y-4">
+            <h2 class="text-3xl font-black text-slate-900">03 &middot; 알고리즘 설계하기</h2>
+            <div class="w-20 h-1.5 bg-teal-500 mx-auto rounded-full"></div>
+        </div>
+
+        <div class="section-card space-y-8">
+            <!-- 흐름 다이어그램 -->
+            <div class="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4 items-center">
+                <div class="bg-sky-50 border-2 border-sky-300 rounded-2xl p-5 text-center space-y-1">
+                    <i class="fa-solid fa-microchip text-sky-600 text-2xl"></i>
+                    <p class="font-black text-lg text-sky-900">실외 마이크로비트</p>
+                    <p class="text-base text-slate-600">실외 온도를 측정해 라디오로 보낸다</p>
+                </div>
+                <div class="flex md:flex-col items-center justify-center gap-1 text-teal-600 font-bold text-sm text-center px-2">
+                    <i class="fa-solid fa-arrow-right md:hidden text-xl"></i>
+                    <i class="fa-solid fa-arrow-down hidden md:block text-xl"></i>
+                    <span>① 실외 온도 전송</span>
+                </div>
+                <div class="bg-violet-50 border-2 border-violet-300 rounded-2xl p-5 text-center space-y-1">
+                    <i class="fa-solid fa-microchip text-violet-600 text-2xl"></i>
+                    <p class="font-black text-lg text-violet-900">실내 마이크로비트</p>
+                    <p class="text-base text-slate-600">받은 값을 실내 온도와 비교해 표시한다</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="bg-slate-100 border border-slate-300 rounded-2xl p-5 space-y-1">
+                    <p class="font-bold text-base text-slate-700"><span class="text-teal-600 font-black">②</span> 실내 온도, 실외 온도를 디스플레이에 출력</p>
+                </div>
+                <div class="bg-slate-100 border border-slate-300 rounded-2xl p-5 space-y-1">
+                    <p class="font-bold text-base text-slate-700"><span class="text-teal-600 font-black">③</span> 실내&middot;실외 온도 차가 적정한지 여부를 디스플레이에 출력</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-5 flex items-center gap-3">
+                    <i class="fa-solid fa-heart text-emerald-600 text-2xl"></i>
+                    <p class="text-base text-emerald-900 font-bold">온도 차가 5도 이내 &rarr; 하트 출력</p>
+                </div>
+                <div class="bg-rose-50 border border-rose-200 rounded-2xl p-5 flex items-center gap-3">
+                    <i class="fa-solid fa-chess-board text-rose-600 text-2xl"></i>
+                    <p class="text-base text-rose-900 font-bold">온도 차가 5도 초과 &rarr; 체스판 출력</p>
+                </div>
+            </div>
+
+          
+
+
+
+    <!-- ══════════ 4. 프로그래밍하기 ══════════ -->
+
+    <section id="program" class="scroll-mt-24 space-y-8">
+        <div class="text-center space-y-4">
+            <h2 class="text-3xl font-black text-slate-900">04 &middot; 프로그래밍하기</h2>
+            <div class="w-20 h-1.5 bg-teal-500 mx-auto rounded-full"></div>
+        </div>
+               
+
+            <hr class="border-slate-200">
+
+            <div>
+                <p class="font-black text-lg text-slate-800 mb-4"><i class="fa-brands fa-python text-teal-600 mr-2"></i>Python 코드</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <p class="font-bold text-base text-sky-900">실외 마이크로비트</p>
+                        <pre class="code-block"><code>from microbit import *  <span class="c"># 마이크로비트 사용</span>
+import radio             <span class="c"># 라디오 사용</span>
+radio.config(group=1)    <span class="c"># 라디오 그룹 1로 설정</span>
+radio.on()                <span class="c"># 라디오 켜기</span>
+
+while True:               <span class="c"># 무한 반복</span>
+    radio.send(str(temperature()))  <span class="c"># 온도 전송</span>
+    sleep(30000)           <span class="c"># 30초 기다림</span></code></pre>
+                    </div>
+                    <div class="space-y-2">
+                        <p class="font-bold text-base text-violet-900">실내 마이크로비트</p>
+                        <pre class="code-block"><code>from microbit import *  <span class="c"># 마이크로비트 사용</span>
+import radio             <span class="c"># 라디오 사용</span>
+radio.config(group=1)    <span class="c"># 라디오 그룹 1로 설정</span>
+radio.on()                <span class="c"># 라디오 켜기</span>
+
+while True:
+    message = radio.receive()          <span class="c"># 무한 반복, 받은 메시지 저장</span>
+    if message:
+        display.scroll('In')           <span class="c"># 'In' 스크롤</span>
+        display.scroll(temperature())  <span class="c"># 실내 온도 출력</span>
+        sleep(500)                     <span class="c"># 0.5초 기다리기</span>
+        display.scroll('Out')          <span class="c"># 'Out' 스크롤</span>
+        display.scroll(message)        <span class="c"># 실외 온도 출력</span>
+        sleep(500)                     <span class="c"># 0.5초 기다리기</span>
+        if abs(temperature() - int(message)) &lt;= 5:
+                                        <span class="c"># 온도 차가 5도 이하면</span>
+            display.show(Image.HEART)  <span class="c"># 하트 출력</span>
+            sleep(500)                  <span class="c"># 0.5초 기다리기</span>
+        else:                           <span class="c"># 온도 차가 5도보다 크면</span>
+            display.show(Image.CHESSBOARD) <span class="c"># 체스판 출력</span>
+            sleep(500)                   <span class="c"># 0.5초 기다리기</span></code></pre>
+                    </div>
+                </div>
+            </div>
+
+         
+        </div>
+    </section>
+
+    <!-- ══════════ 5. 평가하기 ══════════ -->
+    <section id="evaluate" class="scroll-mt-24 space-y-8">
+        <div class="text-center space-y-4">
+            <h2 class="text-3xl font-black text-slate-900">05 &middot; 평가하기</h2>
+            <div class="w-20 h-1.5 bg-teal-500 mx-auto rounded-full"></div>
+        </div>
+
+        <div class="section-card space-y-6">
+            <p class="text-base text-slate-700 leading-relaxed">
+                아래 점검표는 이번 실습의 각 단계를 되짚어 봅니다. 스스로 체크해 보세요.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div class="bg-slate-50 border-2 border-slate-200 rounded-2xl p-6 space-y-3">
+                    <p class="font-black text-base text-teal-700 uppercase tracking-widest">문제 이해 및 준비</p>
+                    <ul class="space-y-2 text-base text-slate-700 list-none pl-0 leading-relaxed">
+                        <li class="flex gap-3"><span class="shrink-0 text-slate-400">☐</span><span>해결해야 하는 문제를 정확히 이해했는가?</span></li>
+                        <li class="flex gap-3"><span class="shrink-0 text-slate-400">☐</span><span>문제 해결에 필요한 준비물은 빠짐없이 준비했는가?</span></li>
+                    </ul>
+                </div>
+                <div class="bg-slate-50 border-2 border-slate-200 rounded-2xl p-6 space-y-3">
+                    <p class="font-black text-base text-teal-700 uppercase tracking-widest">문제 분석</p>
+                    <ul class="space-y-2 text-base text-slate-700 list-none pl-0 leading-relaxed">
+                        <li class="flex gap-3"><span class="shrink-0 text-slate-400">☐</span><span>수집해야 할 데이터와 처리 과정을 이해했는가?</span></li>
+                    </ul>
+                </div>
+                <div class="bg-slate-50 border-2 border-slate-200 rounded-2xl p-6 space-y-3">
+                    <p class="font-black text-base text-teal-700 uppercase tracking-widest">알고리즘 설계</p>
+                    <ul class="space-y-2 text-base text-slate-700 list-none pl-0 leading-relaxed">
+                        <li class="flex gap-3"><span class="shrink-0 text-slate-400">☐</span><span>의사코드로 표현된 알고리즘 과정을 이해했는가?</span></li>
+                    </ul>
+                </div>
+                <div class="bg-slate-50 border-2 border-slate-200 rounded-2xl p-6 space-y-3">
+                    <p class="font-black text-base text-teal-700 uppercase tracking-widest">프로그래밍</p>
+                    <ul class="space-y-2 text-base text-slate-700 list-none pl-0 leading-relaxed">
+                        <li class="flex gap-3"><span class="shrink-0 text-slate-400">☐</span><span>프로그램이 올바르게 실행되었는가?</span></li>
+                        <li class="flex gap-3"><span class="shrink-0 text-slate-400">☐</span><span>네트워크를 통한 데이터의 이동을 이해할 수 있는가?</span></li>
+                        <li class="flex gap-3"><span class="shrink-0 text-slate-400">☐</span><span>프로그램 오류가 발생했을 때 오류 수정을 할 수 있는가?</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+ 
+</body>
+</html>
