@@ -144,6 +144,26 @@
             min-width: 32rem;
         }
 
+        /* 전송매체 비교표: 7~8열이라 32rem으로는 셀이 눌린다. 더 넓게 잡고 래퍼 안에서 가로 스크롤한다. */
+        table.table-wide {
+            min-width: 60rem;
+        }
+
+        table.table-wide th,
+        table.table-wide td {
+            font-size: 0.95rem;
+            padding: 0.6rem 0.75rem;
+            vertical-align: middle;
+        }
+
+        table.table-wide th.media-group {
+            background-color: #f0fdfa;
+            color: #115e59;
+            font-weight: 900;
+            text-align: center;
+            white-space: nowrap;
+        }
+
         /* 프로그램·사이트 안의 고유 이름을 본문과 구별해 표시한다.
 
            `font-mono`를 쓰지 않는다. 화면에 적힌 이름은 코드가 아니라서 모노스페이스로 두면
@@ -663,16 +683,6 @@
                 </p>
             </div>
         </div>
-
-        <div class="bg-sky-50 border border-sky-200 border-l-4 border-l-sky-500 rounded-2xl px-6 py-5 flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-            <span class="shrink-0 bg-sky-500 text-white font-bold text-base px-4 py-1.5 rounded-full whitespace-nowrap">
-                <i class="fa-solid fa-circle-question mr-1"></i>스스로 확인
-            </span>
-            <p class="text-base text-sky-900 font-medium leading-relaxed">
-                교실의 이산화탄소 농도를 측정하는 장치를 둔다면, 위 표의 네 부분 가운데 무엇이 필요하고 무엇은
-                없어도 될까요?
-            </p>
-        </div>
     </section>
 
     <!-- ══════════ 3. 통신 네트워크 ══════════ -->
@@ -782,6 +792,228 @@
                 공유기가 맡습니다. 사물 인터넷을 위해 새로 만든 장치가 아니라, <strong>이미 깔려 있던 인터넷을
                 그대로 빌려 쓰는 것</strong>입니다.
             </p>
+        </div>
+
+        <!-- IoT 전송매체 비교표 -->
+        <div id="media-compare" class="section-card space-y-6 scroll-mt-24">
+            <p class="font-black text-xl text-slate-900">
+                <i class="fa-solid fa-table-list text-teal-500 mr-2"></i>IoT 전송매체 비교표
+            </p>
+            <p class="text-base text-slate-700 leading-relaxed">
+                앞에서 본 거리&middot;전력&middot;데이터의 양을 기준으로 실제 전송매체들을 견주어 보면 이렇습니다.
+                표가 넓으면 옆으로 밀어서 보세요.
+            </p>
+
+            <p class="font-black text-lg text-teal-900">
+                <i class="fa-solid fa-plug text-teal-500 mr-2"></i>유선 전송매체
+            </p>
+            <div class="overflow-x-auto">
+                <table class="table-prose table-wide">
+                    <caption class="text-base text-slate-500 text-left mb-2">선으로 연결하는 전송매체</caption>
+                    <thead>
+                    <tr>
+                        <th>구분</th>
+                        <th>전송 원리</th>
+                        <th>전송 속도</th>
+                        <th>전송 거리</th>
+                        <th>장점</th>
+                        <th>단점</th>
+                        <th>주요 활용</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="font-bold whitespace-nowrap">트위스티드 페어</td>
+                        <td>꼬인 구리선의 전기 신호</td>
+                        <td>~10Gbps</td>
+                        <td>~100m</td>
+                        <td>저렴, 설치 쉬움, PoE로 전원 공급</td>
+                        <td>간섭에 비교적 약함, 거리 제한</td>
+                        <td>이더넷, RS-485, CAN, IP 카메라</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold whitespace-nowrap">동축 케이블</td>
+                        <td>차폐된 구리선의 전기 신호</td>
+                        <td>~수 Gbps</td>
+                        <td>~수 km</td>
+                        <td>잡음에 강함</td>
+                        <td>두껍고 설치가 번거로움</td>
+                        <td>CCTV, 케이블 인터넷</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold whitespace-nowrap">광섬유</td>
+                        <td>빛의 전반사</td>
+                        <td>~수십 Gbps 이상</td>
+                        <td>수십 km 이상</td>
+                        <td>초고속, 장거리, 전자기 간섭 없음</td>
+                        <td>고가, 시공이 까다로움</td>
+                        <td>IoT 백본망, 스마트시티 기간망</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold whitespace-nowrap">전력선 통신(PLC)</td>
+                        <td>전력선에 고주파 신호 중첩</td>
+                        <td>수 kbps ~ 수백 Mbps</td>
+                        <td>수백 m ~ 수 km</td>
+                        <td>별도 배선 불필요</td>
+                        <td>전력선 잡음으로 품질 불안정</td>
+                        <td>스마트 미터, 가전 제어</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p class="font-black text-lg text-teal-900">
+                <i class="fa-solid fa-wifi text-teal-500 mr-2"></i>무선 전송매체
+            </p>
+            <div class="overflow-x-auto">
+                <table class="table-prose table-wide">
+                    <caption class="text-base text-slate-500 text-left mb-2">전파&middot;빛으로 연결하는 전송매체</caption>
+                    <thead>
+                    <tr>
+                        <th>분류</th>
+                        <th>기술</th>
+                        <th>주파수 대역</th>
+                        <th>전송 속도</th>
+                        <th>전송 거리</th>
+                        <th>전력 소모</th>
+                        <th>네트워크 구조</th>
+                        <th>주요 활용</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="rowgroup" rowspan="7" class="media-group">근거리</th>
+                        <td class="font-bold whitespace-nowrap">RFID</td>
+                        <td>LF/HF/UHF</td>
+                        <td>낮음</td>
+                        <td>수 cm ~ 수 m</td>
+                        <td>매우 낮음 (패시브는 무전원)</td>
+                        <td>리더-태그</td>
+                        <td>물류, 재고, 출입 통제</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold whitespace-nowrap">NFC</td>
+                        <td>13.56MHz</td>
+                        <td>~424kbps</td>
+                        <td>~10cm</td>
+                        <td>매우 낮음</td>
+                        <td>P2P</td>
+                        <td>모바일 결제, 페어링</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold whitespace-nowrap">BLE</td>
+                        <td>2.4GHz</td>
+                        <td>~2Mbps</td>
+                        <td>~수십 m</td>
+                        <td>낮음</td>
+                        <td>스타/메시</td>
+                        <td>웨어러블, 비콘, 헬스케어</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold whitespace-nowrap">Zigbee</td>
+                        <td>2.4GHz 등</td>
+                        <td>~250kbps</td>
+                        <td>10~100m</td>
+                        <td>매우 낮음</td>
+                        <td>메시</td>
+                        <td>스마트홈 조명·센서</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold whitespace-nowrap">Z-Wave</td>
+                        <td>1GHz 이하</td>
+                        <td>~100kbps</td>
+                        <td>~30~100m</td>
+                        <td>낮음</td>
+                        <td>메시</td>
+                        <td>도어락, 보안 기기</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold whitespace-nowrap">Wi-Fi</td>
+                        <td>2.4/5/6GHz</td>
+                        <td>수백 Mbps ~ 수 Gbps</td>
+                        <td>~수십 m</td>
+                        <td>높음</td>
+                        <td>스타</td>
+                        <td>스마트 가전, IP 카메라</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold whitespace-nowrap">Thread</td>
+                        <td>2.4GHz</td>
+                        <td>~250kbps</td>
+                        <td>10~100m</td>
+                        <td>낮음</td>
+                        <td>IPv6 메시</td>
+                        <td>차세대 스마트홈(Matter)</td>
+                    </tr>
+                    <tr>
+                        <th scope="rowgroup" rowspan="4" class="media-group">LPWAN</th>
+                        <td class="font-bold whitespace-nowrap">LoRa/LoRaWAN</td>
+                        <td>비면허 Sub-GHz</td>
+                        <td>0.3~50kbps</td>
+                        <td>수~15km 이상</td>
+                        <td>매우 낮음</td>
+                        <td>스타</td>
+                        <td>스마트 농업, 환경 모니터링</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold whitespace-nowrap">Sigfox</td>
+                        <td>비면허 Sub-GHz</td>
+                        <td>~100bps</td>
+                        <td>수~수십 km</td>
+                        <td>매우 낮음</td>
+                        <td>스타</td>
+                        <td>소량 데이터 원격 센서</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold whitespace-nowrap">NB-IoT</td>
+                        <td>LTE 면허 대역</td>
+                        <td>~수십~250kbps</td>
+                        <td>수~10km</td>
+                        <td>매우 낮음</td>
+                        <td>셀룰러</td>
+                        <td>원격 검침, 실내 센서</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold whitespace-nowrap">LTE-M</td>
+                        <td>LTE 면허 대역</td>
+                        <td>~1Mbps</td>
+                        <td>수~10km</td>
+                        <td>낮음</td>
+                        <td>셀룰러</td>
+                        <td>위치 추적, 웨어러블</td>
+                    </tr>
+                    <tr>
+                        <th scope="rowgroup" rowspan="1" class="media-group">셀룰러</th>
+                        <td class="font-bold whitespace-nowrap">LTE / 5G</td>
+                        <td>면허 대역</td>
+                        <td>수백 Mbps ~ 수 Gbps</td>
+                        <td>수 km (기지국 기반)</td>
+                        <td>높음</td>
+                        <td>셀룰러</td>
+                        <td>자율주행, 원격 의료, 스마트 팩토리</td>
+                    </tr>
+                    <tr>
+                        <th scope="rowgroup" rowspan="2" class="media-group">광 무선</th>
+                        <td class="font-bold whitespace-nowrap">적외선(IrDA)</td>
+                        <td>적외선</td>
+                        <td>~수 Mbps</td>
+                        <td>~수 m (가시거리)</td>
+                        <td>낮음</td>
+                        <td>P2P</td>
+                        <td>리모컨, 근접 센서</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold whitespace-nowrap">가시광 통신(Li-Fi)</td>
+                        <td>가시광선</td>
+                        <td>~수 Gbps</td>
+                        <td>~수 m (조명 범위)</td>
+                        <td>조명과 겸용</td>
+                        <td>스타</td>
+                        <td>병원, 항공기, 전파 제한 구역</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <div class="bg-sky-50 border border-sky-200 border-l-4 border-l-sky-500 rounded-2xl px-6 py-5 flex flex-col sm:flex-row gap-4 items-start sm:items-center">
